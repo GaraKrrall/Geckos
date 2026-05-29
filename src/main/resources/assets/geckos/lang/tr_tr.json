@@ -1,0 +1,10 @@
+{
+  "message.gecko.dropped": "You dropped your gecko!",
+  "entity.geckos.gecko": "Gecko",
+  "entity.geckos.fly": "Fly",
+  "item.geckos.dead_fly": "Dead Fly",
+  "item.geckos.gecko_spawn_egg": "Gecko Spawn Egg",
+  "item.geckos.fly_spawn_egg": "Fly Spawn Egg",
+  "key.category.geckos": "Geckos",
+  "key.geckos.dismount": "Drop the Gecko"
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "geckos:block/red_wood_log",
+    "side": "geckos:block/red_wood_log"
+  }
+}

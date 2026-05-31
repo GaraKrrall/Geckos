@@ -9,9 +9,6 @@
 
 package mc.garakrral.geckos.util.event;
 
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
-import mc.garakrral.geckos.entity.variant.GeckoVariants;
-
 public class ServerVariantBackwardCompatibilityProvider {
 
 }

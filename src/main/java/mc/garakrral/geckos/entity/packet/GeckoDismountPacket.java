@@ -11,7 +11,7 @@ package mc.garakrral.geckos.entity.packet;
 
 import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.attachment.ModAttachments;
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;

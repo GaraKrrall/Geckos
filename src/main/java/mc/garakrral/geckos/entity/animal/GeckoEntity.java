@@ -7,7 +7,7 @@
  *
  */
 
-package mc.garakrral.geckos.entity.custom;
+package mc.garakrral.geckos.entity.animal;
 
 import mc.garakrral.geckos.client.GeckoClientUtil;
 import mc.garakrral.geckos.entity.ModEntities;

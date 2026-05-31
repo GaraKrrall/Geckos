@@ -13,7 +13,7 @@ import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.GeckosConfig;
 import mc.garakrral.geckos.attachment.ModAttachments;
 import mc.garakrral.geckos.client.keybind.KeyBindings;
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

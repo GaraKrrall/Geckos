@@ -9,7 +9,7 @@
 
 package mc.garakrral.geckos.util.event;
 
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;

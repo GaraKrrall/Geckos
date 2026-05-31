@@ -10,7 +10,7 @@
 package mc.garakrral.geckos.util.event.neoforge;
 
 import mc.garakrral.geckos.Geckos;
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;

@@ -7,7 +7,7 @@
  *
  */
 
-package mc.garakrral.geckos.entity.custom;
+package mc.garakrral.geckos.entity.animal;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,7 +24,6 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import mc.garakrral.geckos.entity.goal.RandomFlyGoal;

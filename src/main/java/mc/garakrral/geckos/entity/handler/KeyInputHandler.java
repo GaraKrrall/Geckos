@@ -14,7 +14,7 @@ import mc.garakrral.geckos.client.keybind.KeyBindings;
 import mc.garakrral.geckos.entity.packet.GeckoCarryPacket;
 import mc.garakrral.geckos.entity.packet.GeckoDismountPacket;
 import mc.garakrral.geckos.entity.packet.GeckoMountPacket;
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 import mc.garakrral.geckos.gui.screen.HudEditScreen;
 
 import net.minecraft.client.Minecraft;

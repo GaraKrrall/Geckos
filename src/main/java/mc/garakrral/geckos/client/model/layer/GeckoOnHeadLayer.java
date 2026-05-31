@@ -16,7 +16,7 @@ import mc.garakrral.geckos.attachment.ModAttachments;
 import mc.garakrral.geckos.client.resources.GeckoResourceLocation;
 import mc.garakrral.geckos.entity.ModEntities;
 import mc.garakrral.geckos.client.model.GeckoModel;
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 import mc.garakrral.geckos.entity.variant.GeckoVariants;
 
 import net.minecraft.client.model.PlayerModel;

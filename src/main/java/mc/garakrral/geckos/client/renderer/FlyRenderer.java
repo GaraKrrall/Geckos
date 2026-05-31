@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.client.model.FlyModel;
-import mc.garakrral.geckos.entity.custom.FlyEntity;
+import mc.garakrral.geckos.entity.animal.FlyEntity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.jetbrains.annotations.NotNull;

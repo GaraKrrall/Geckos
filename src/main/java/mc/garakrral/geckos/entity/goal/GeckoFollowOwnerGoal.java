@@ -9,7 +9,7 @@
 
 package mc.garakrral.geckos.entity.goal;
 
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.TamableAnimal;

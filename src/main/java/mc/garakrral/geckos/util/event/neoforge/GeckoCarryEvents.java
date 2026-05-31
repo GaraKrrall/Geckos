@@ -10,10 +10,9 @@
 package mc.garakrral.geckos.util.event.neoforge;
 
 import mc.garakrral.geckos.Geckos;
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 import mc.garakrral.geckos.entity.packet.GeckoDistancePacket;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

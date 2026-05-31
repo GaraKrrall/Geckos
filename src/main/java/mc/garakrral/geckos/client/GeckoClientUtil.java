@@ -9,7 +9,7 @@
 
 package mc.garakrral.geckos.client;
 
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;

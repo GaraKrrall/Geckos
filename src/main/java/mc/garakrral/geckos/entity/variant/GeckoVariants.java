@@ -9,7 +9,7 @@
 
 package mc.garakrral.geckos.entity.variant;
 
-import mc.garakrral.geckos.entity.custom.GeckoEntity;
+import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
 import net.minecraft.Util;
 import net.minecraft.util.RandomSource;

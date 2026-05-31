@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "geckos:red_wood_planks"
+          "name": "geckos:gecko_statue"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "geckos:blocks/red_wood_planks"
+  "random_sequence": "geckos:blocks/gecko_statue"
 }

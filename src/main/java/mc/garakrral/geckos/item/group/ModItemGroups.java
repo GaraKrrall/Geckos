@@ -9,15 +9,16 @@
 
 package mc.garakrral.geckos.item.group;
 
+import mc.garakrral.geckos.Geckos;
+import mc.garakrral.geckos.block.ModBlocks;
+import mc.garakrral.geckos.item.ModItems;
+
 import java.util.function.Supplier;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-
-import mc.garakrral.geckos.Geckos;
-import mc.garakrral.geckos.item.ModItems;
 
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -33,6 +34,7 @@ public class ModItemGroups {
                         output.accept(ModItems.GECKO_SPAWN_EGG);
                         output.accept(ModItems.FLY_SPAWN_EGG);
                         output.accept(ModItems.DEAD_FLY);
+                        output.accept(ModBlocks.GECKO_STATUE);
                     })
                     .build());
 }

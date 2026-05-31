@@ -26,13 +26,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-
-        this.dropSelf(ModBlocks.RED_WOOD_LOG.get());
-        this.dropSelf(ModBlocks.RED_WOOD_PLANKS.get());
-        this.dropSelf(ModBlocks.STRIPPED_RED_WOOD_LOG.get());
-        this.dropSelf(ModBlocks.STRIPPED_RED_WOOD.get());
-        this.dropSelf(ModBlocks.RED_WOOD.get());
-
+        this.dropSelf(ModBlocks.GECKO_STATUE.get());
     }
 
     @Override

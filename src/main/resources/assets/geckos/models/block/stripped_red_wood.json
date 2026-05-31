@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "geckos:block/stripped_red_wood_log",
-    "side": "geckos:block/stripped_red_wood_log"
-  }
-}

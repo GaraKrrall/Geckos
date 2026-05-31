@@ -28,17 +28,5 @@ public class ModBlockTagProvider extends BlockTagsProvider {
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
-        this.tag(BlockTags.LOGS)
-                .add(ModBlocks.RED_WOOD_LOG.get())
-                .add(ModBlocks.RED_WOOD.get())
-                .add(ModBlocks.STRIPPED_RED_WOOD_LOG.get())
-                .add(ModBlocks.STRIPPED_RED_WOOD.get());
-
-        this.tag(BlockTags.LOGS_THAT_BURN)
-                .add(ModBlocks.RED_WOOD_LOG.get())
-                .add(ModBlocks.RED_WOOD.get())
-                .add(ModBlocks.STRIPPED_RED_WOOD_LOG.get())
-                .add(ModBlocks.STRIPPED_RED_WOOD.get());
-    }
+    protected void addTags(HolderLookup.Provider provider) {}
 }

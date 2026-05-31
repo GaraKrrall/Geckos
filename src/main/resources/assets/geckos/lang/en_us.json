@@ -6,5 +6,6 @@
   "item.geckos.gecko_spawn_egg": "Gecko Spawn Egg",
   "item.geckos.fly_spawn_egg": "Fly Spawn Egg",
   "key.category.geckos": "Geckos",
-  "key.geckos.dismount": "Drop the Gecko"
+  "key.geckos.dismount": "Drop the Gecko",
+  "block.geckos.gecko_statue": "Gecko Statue"
 }

@@ -30,16 +30,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-       logBlock(((RotatedPillarBlock) ModBlocks.RED_WOOD_LOG.get()));
-       logBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_RED_WOOD_LOG.get()));
-       axisBlock(((RotatedPillarBlock) ModBlocks.RED_WOOD.get()), blockTexture(ModBlocks.RED_WOOD_LOG.get()), blockTexture(ModBlocks.RED_WOOD_LOG.get()));
-       axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_RED_WOOD.get()), blockTexture(ModBlocks.STRIPPED_RED_WOOD_LOG.get()), blockTexture(ModBlocks.STRIPPED_RED_WOOD_LOG.get()));
-       blockItem(ModBlocks.RED_WOOD_LOG);
-       blockItem(ModBlocks.RED_WOOD);
-       blockItem(ModBlocks.STRIPPED_RED_WOOD_LOG);
-       blockItem(ModBlocks.STRIPPED_RED_WOOD);
-       blockWithItem(ModBlocks.RED_WOOD_PLANKS);
-       leavesBlock(ModBlocks.RED_WOOD_LEAVES);
+      blockItem(ModBlocks.GECKO_STATUE);
     }
 
     private void saplingBlock(DeferredBlock<Block> object) {

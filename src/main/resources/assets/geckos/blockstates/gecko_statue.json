@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "geckos:block/gecko_statue"
+    },
+    "facing=east": {
+      "model": "geckos:block/gecko_statue",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "geckos:block/gecko_statue",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "geckos:block/gecko_statue",
+      "y": 270
+    }
+  }
+}

@@ -24,7 +24,7 @@ public enum GeckoVariants {
     BROWN(3),
     RED(4),
     PHANTOM(5),
-    NETHER_BASALT(6);
+    @Deprecated(since = "0.1.1") NETHER_BASALT(6);
 
     private static final GeckoVariants[] BY_ID = Arrays.stream(values()).sorted(
             Comparator.comparingInt(GeckoVariants::getId)).toArray(GeckoVariants[]::new);

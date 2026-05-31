@@ -1,3 +1,12 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.datagen;
 
 import java.util.Collections;
@@ -8,7 +17,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -17,7 +26,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 @SuppressWarnings("removal")
-@EventBusSubscriber(modid = Main.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Geckos.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModDataGenerators {
 
     @SubscribeEvent
@@ -39,7 +48,7 @@ public class ModDataGenerators {
 
         gen.addProvider(dataEvent.includeServer(), new ModItemTagProvider(out, lookup, modBlockTagProvider.contentsGetter(), helper));
 
-        gen.addProvider(dataEvent.includeServer(), new ModDatapackProvider(out, lookup));
+        //gen.addProvider(dataEvent.includeServer(), new ModDatapackProvider(out, lookup));
 
         gen.addProvider(dataEvent.includeClient(), new ModItemModelProvider(out, helper));
     }

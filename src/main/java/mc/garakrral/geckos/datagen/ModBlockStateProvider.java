@@ -1,3 +1,12 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.datagen;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -6,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.block.ModBlocks;
 
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
@@ -16,7 +25,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class ModBlockStateProvider extends BlockStateProvider {
     public ModBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
-        super(output, Main.MODID, exFileHelper);
+        super(output, Geckos.MODID, exFileHelper);
     }
 
     @Override
@@ -31,7 +40,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
        blockItem(ModBlocks.STRIPPED_RED_WOOD);
        blockWithItem(ModBlocks.RED_WOOD_PLANKS);
        leavesBlock(ModBlocks.RED_WOOD_LEAVES);
-       saplingBlock(ModBlocks.RED_WOOD_SAPLING);
     }
 
     private void saplingBlock(DeferredBlock<Block> object) {

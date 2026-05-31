@@ -1,15 +1,28 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.entity.custom;
 
-import mc.garakrral.geckos.entity.client.GeckoClientUtil;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleTypes;
+import mc.garakrral.geckos.client.GeckoClientUtil;
+import mc.garakrral.geckos.entity.ModEntities;
+import mc.garakrral.geckos.entity.goal.GeckoFollowOwnerGoal;
+import mc.garakrral.geckos.entity.goal.GeckoLandOnShoulderGoal;
+import mc.garakrral.geckos.entity.variant.GeckoVariants;
+import mc.garakrral.geckos.item.ModItems;
+import mc.garakrral.geckos.util.event.ServerGeckoCarryEvents;
+import mc.garakrral.geckos.util.event.ServerParticlesEvent;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,30 +36,17 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.ShoulderRidingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
-import mc.garakrral.geckos.entity.ModEntities;
-import mc.garakrral.geckos.entity.variant.GeckoVariant;
-import mc.garakrral.geckos.item.ModItems;
-import mc.garakrral.geckos.entity.goal.GeckoFollowOwnerGoal;
-import mc.garakrral.geckos.entity.goal.GeckoLandOnShoulderGoal;
-import mc.garakrral.geckos.entity.variant.type.GeckoType;
-import mc.garakrral.geckos.entity.custom.base.BaseGeckoEntity;
-
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GeckoEntity extends BaseGeckoEntity {
+public class GeckoEntity extends ShoulderRidingEntity {
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState swimAnimationState = new AnimationState();
     public final AnimationState sleepAnimationState = new AnimationState();
-
-    private static final GeckoType GECKO_TYPE = GeckoType.NORMAL;
 
     protected static final int SLEEP_STATE_CHECK_INTERVAL = 100;
     protected static final int SLEEP_CHANCE = 3;
@@ -87,7 +87,7 @@ public class GeckoEntity extends BaseGeckoEntity {
     public static final float MAX_CARRY_DISTANCE = 3.0F;
 
     public GeckoEntity(EntityType<? extends ShoulderRidingEntity> entityType, Level level) {
-        super(entityType, level, GECKO_TYPE);
+        super(entityType, level);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class GeckoEntity extends BaseGeckoEntity {
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(12, new GeckoFollowOwnerGoal(this, 1.2D, 3.0F, 1.0F, false));
+        this.goalSelector.addGoal(12, new GeckoFollowOwnerGoal(this, 1.2D, 3.0F, 1.0F));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, FlyEntity.class, true));
     }
@@ -124,14 +124,14 @@ public class GeckoEntity extends BaseGeckoEntity {
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob partner) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob partner) {
         GeckoEntity babyGecko = ModEntities.GECKO.get().create(level);
 
         if (babyGecko != null) {
-            GeckoVariant v1 = this.getGeckoVariant();
-            GeckoVariant v2 = ((GeckoEntity) partner).getGeckoVariant();
+            GeckoVariants v1 = this.getGeckoVariant();
+            GeckoVariants v2 = ((GeckoEntity) partner).getGeckoVariant();
 
-            GeckoVariant selected = this.random.nextBoolean() ? v1 : v2;
+            GeckoVariants selected = this.random.nextBoolean() ? v1 : v2;
             babyGecko.setGeckoVariant(selected);
 
             if (this.isTame()) {
@@ -171,12 +171,10 @@ public class GeckoEntity extends BaseGeckoEntity {
         if (!isMoving && !isInWaterOrBubble()) {
             if (idleDelay > 0) {
                 idleDelay--;
-            }
-            else {
+            } else {
                 idleAnimationState.startIfStopped(tickCount);
             }
-        }
-        else {
+        } else {
             idleDelay = 3;
             idleAnimationState.stop();
         }
@@ -189,16 +187,14 @@ public class GeckoEntity extends BaseGeckoEntity {
         if (isServerSide()) {
 
             if (this.isCarried()) {
-                this.carriedEvent();
+                ServerGeckoCarryEvents.updateCarriedServerPosition(this);
             } else {
                 this.setNoAi(false);
             }
 
             if (this.isSittingGecko() || this.isMorningSleeping()) {
                 this.setSleepingGecko(true);
-            }
-
-            else if (level().isNight() && !isInWaterOrBubble() && !isSittingGecko() && !hasTarget()) {
+            } else if (level().isNight() && !isInWaterOrBubble() && !isSittingGecko() && !hasTarget()) {
                 sleepCheckCooldown--;
 
                 if (sleepCheckCooldown <= 0) {
@@ -211,18 +207,16 @@ public class GeckoEntity extends BaseGeckoEntity {
                         setDeltaMovement(0, getDeltaMovement().y, 0);
                     }
                 }
-            }
+            } else if (level().isDay() && !isInWaterOrBubble()) {
+                wakeUpCheckCooldown--;
 
-            else if (level().isDay() && !isInWaterOrBubble()) {
-               wakeUpCheckCooldown --;
+                if (wakeUpCheckCooldown <= 0) {
+                    wakeUpCheckCooldown = SLEEP_STATE_CHECK_INTERVAL;
 
-               if (wakeUpCheckCooldown <= 0) {
-                   wakeUpCheckCooldown = SLEEP_STATE_CHECK_INTERVAL;
-
-                   if (random.nextInt(WAKEUP_CHANCE) == 0) {
-                       setSleepingGecko(false);
-                   }
-               }
+                    if (random.nextInt(WAKEUP_CHANCE) == 0) {
+                        setSleepingGecko(false);
+                    }
+                }
             } else {
                 sleepCheckCooldown = SLEEP_STATE_CHECK_INTERVAL;
                 wakeUpCheckCooldown = SLEEP_STATE_CHECK_INTERVAL;
@@ -252,15 +246,15 @@ public class GeckoEntity extends BaseGeckoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource s, float a) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         if (this.isPassenger()) {
             return false;
         }
-        return super.hurt(s, a);
+        return super.hurt(source, amount);
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         super.defineSynchedData(builder);
         builder.define(VARIANT, 0);
         builder.define(SLEEPING, false);
@@ -273,101 +267,167 @@ public class GeckoEntity extends BaseGeckoEntity {
 
     @NotNull
     @Override
-    public InteractionResult mobInteract(Player p, @NotNull InteractionHand hand) {
-        ItemStack item = p.getItemInHand(hand);
+    public InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
+        ItemStack item = player.getItemInHand(hand);
 
-        if (item.is(ModItems.DEAD_FLY.get())) {
-            if (this.level().isNight()) return InteractionResult.FAIL;
-
-            if (!this.isTame() && !this.isSleepingGecko() && !this.isSittingGecko()) {
-                if (this.isServerSide()) {
-                    if (this.random.nextInt(TAME_CHANCE) == 0) {
-                        this.tame(p);
-                        this.navigation.stop();
-                        this.setTarget(null);
-                        this.level().broadcastEntityEvent(this, (byte) 7);
-                    } else {
-                        this.level().broadcastEntityEvent(this, (byte) 6);
-                    }
-
-                    if (!p.getAbilities().instabuild) item.shrink(1);
-                }
-                return InteractionResult.SUCCESS;
-            }
-            else if (this.isInjured() && this.isTame() && !this.isSleepingGecko() && !this.isSittingGecko()) {
-                if (this.isServerSide()) {
-                    this.heal(1.0F);
-
-                    this.createHeartParticles(3, 0);
-                    if (!p.getAbilities().instabuild) item.shrink(1);
-                }
-                return InteractionResult.SUCCESS;
-            }
-            else if (this.isTame() && this.getAge() == 0 && !this.isInLove() && !this.isSleepingGecko() && !this.isSittingGecko() && this.isMaxHealth()) {
-                if (this.isBaby()) return InteractionResult.FAIL;
-
-                if (this.isServerSide()) {
-                    this.setInLove(p);
-
-                    if (!p.getAbilities().instabuild) item.shrink(1);
-                }
-                return InteractionResult.SUCCESS;
-            }
+        InteractionResult foodResult = handleDeadFlyInteraction(player, item);
+        if (foodResult.consumesAction()) {
+            return foodResult;
         }
 
-        if (this.isTame() && p.getMainHandItem().isEmpty()) {
-            if (this.isSleepingGecko() && this.level().isNight()) return InteractionResult.FAIL;
-
-            if (isServerSide()) {
-                if (!p.equals(this.getOwner())) return InteractionResult.FAIL;
-
-                this.setSleepingGecko(false);
-                this.setSittingGecko(!this.isSittingGecko());
-                this.navigation.stop();
-                this.setTarget(null);
-            }
-            return InteractionResult.SUCCESS;
+        InteractionResult sitResult = handleSitInteraction(player);
+        if (sitResult.consumesAction()) {
+            return sitResult;
         }
 
-        return super.mobInteract(p, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag c) {
-        super.addAdditionalSaveData(c);
-        c.putInt("Variant", this.getTypeGeckoVariant());
-        c.putBoolean("Sleeping", this.isSleepingGecko());
-        c.putBoolean("Sitting", this.isSittingGecko());
-        c.putBoolean("OnShoulder", this.isShoulderRiding());
-        c.putBoolean("MorningSleeping", this.isMorningSleeping());
-        c.putBoolean("OnHead", this.isOnHead());
-        c.putBoolean("Carried", this.isCarried());
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("Variant", this.getTypeGeckoVariant());
+        tag.putBoolean("Sleeping", this.isSleepingGecko());
+        tag.putBoolean("Sitting", this.isSittingGecko());
+        tag.putBoolean("OnShoulder", this.isShoulderRiding());
+        tag.putBoolean("MorningSleeping", this.isMorningSleeping());
+        tag.putBoolean("OnHead", this.isOnHead());
+        tag.putBoolean("Carried", this.isCarried());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag c) {
-        super.readAdditionalSaveData(c);
-        this.entityData.set(VARIANT, c.getInt("Variant") & 255);
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.entityData.set(VARIANT, tag.getInt("Variant") & 255);
+        GeckoVariants.changeRemovedVariants(this, this.random);
 
-        if (c.contains("Sleeping")) {
-            this.entityData.set(SLEEPING, c.getBoolean("Sleeping"));
+        if (tag.contains("Sleeping")) {
+            this.entityData.set(SLEEPING, tag.getBoolean("Sleeping"));
         } else {
             this.entityData.set(SLEEPING, false);
         }
-        if (c.contains("Sitting")) {
-            this.setSittingGecko(c.getBoolean("Sitting"));
+        if (tag.contains("Sitting")) {
+            this.setSittingGecko(tag.getBoolean("Sitting"));
         }
-        if (c.contains("OnShoulder")) {
-            this.setShoulderRiding(c.getBoolean("OnShoulder"));
+        if (tag.contains("OnShoulder")) {
+            this.setShoulderRiding(tag.getBoolean("OnShoulder"));
         }
-        if (c.contains("MorningSleeping")) {
-            this.setMorningSleeping(c.getBoolean("MorningSleeping"));
+        if (tag.contains("MorningSleeping")) {
+            this.setMorningSleeping(tag.getBoolean("MorningSleeping"));
         }
-        if (c.contains("OnHead")) {
-            this.setOnHead(c.getBoolean("OnHead"));
+        if (tag.contains("OnHead")) {
+            this.setOnHead(tag.getBoolean("OnHead"));
         }
-        if (c.contains("Carried")) {
-            this.setCarried(c.getBoolean("Carried"));
+        if (tag.contains("Carried")) {
+            this.setCarried(tag.getBoolean("Carried"));
+        }
+    }
+
+    private InteractionResult handleDeadFlyInteraction(Player player, ItemStack item) {
+        if (!item.is(ModItems.DEAD_FLY.get())) {
+            return InteractionResult.PASS;
+        }
+
+        if (this.level().isNight()) {
+            return InteractionResult.FAIL;
+        }
+
+        if (canBeTamed()) {
+            return tameGecko(player, item);
+        }
+
+        if (canBeHealed()) {
+            return healGecko(player, item);
+        }
+
+        if (canBreed()) {
+            return breedGecko(player, item);
+        }
+
+        return InteractionResult.PASS;
+    }
+
+    private InteractionResult tameGecko(Player player, ItemStack item) {
+        if (this.isServerSide()) {
+            if (this.random.nextInt(TAME_CHANCE) == 0) {
+                this.tame(player);
+                this.navigation.stop();
+                this.setTarget(null);
+                this.level().broadcastEntityEvent(this, (byte) 7);
+            } else {
+                this.level().broadcastEntityEvent(this, (byte) 6);
+            }
+
+            consumeItem(player, item);
+        }
+
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult healGecko(Player player, ItemStack item) {
+        if (this.isServerSide()) {
+            this.heal(1.0F);
+
+            ServerParticlesEvent.createHeartParticles(this, 3, 0);
+
+            consumeItem(player, item);
+        }
+
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult breedGecko(Player player, ItemStack item) {
+        if (this.isBaby()) {
+            return InteractionResult.FAIL;
+        }
+
+        if (this.isServerSide()) {
+            this.setInLove(player);
+
+            consumeItem(player, item);
+        }
+
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult handleSitInteraction(Player player) {
+        if (!this.isTame() || !player.getMainHandItem().isEmpty()) {
+            return InteractionResult.PASS;
+        }
+
+        if (this.isSleepingGecko() && this.level().isNight()) {
+            return InteractionResult.FAIL;
+        }
+
+        if (this.isServerSide()) {
+            if (!player.equals(this.getOwner())) {
+                return InteractionResult.FAIL;
+            }
+
+            this.setSleepingGecko(false);
+            this.setSittingGecko(!this.isSittingGecko());
+            this.navigation.stop();
+            this.setTarget(null);
+        }
+
+        return InteractionResult.SUCCESS;
+    }
+
+    private boolean canBeTamed() {
+        return !this.isTame() && !this.isSleepingGecko() && !this.isSittingGecko();
+    }
+
+    private boolean canBeHealed() {
+        return this.isInjured() && this.isTame() && !this.isSleepingGecko() && !this.isSittingGecko();
+    }
+
+    public boolean canBreed() {
+        return this.isTame() && this.getAge() == 0 && !this.isInLove() && !this.isSleepingGecko() && !this.isSittingGecko() && this.isMaxHealth();
+    }
+
+    private static void consumeItem(Player player, ItemStack stack) {
+        if (!player.getAbilities().instabuild) {
+            stack.shrink(1);
         }
     }
 
@@ -388,7 +448,7 @@ public class GeckoEntity extends BaseGeckoEntity {
     }
 
     public boolean isSittingGecko() {
-       return this.entityData.get(SITTING);
+        return this.entityData.get(SITTING);
     }
 
     public void setSittingGecko(boolean sit) {
@@ -411,7 +471,7 @@ public class GeckoEntity extends BaseGeckoEntity {
         this.entityData.set(ON_HEAD, onHead);
     }
 
-    public boolean isCarried () {
+    public boolean isCarried() {
         return this.entityData.get(CARRIED);
     }
 
@@ -424,12 +484,8 @@ public class GeckoEntity extends BaseGeckoEntity {
         }
     }
 
-    public int getShoulderCooldown() {
-        return this.shoulderCooldown;
-    }
     public void setShoulderCooldown(int cooldown) {
-
-        this.shoulderCooldown = Math.max(0, Math.min(cooldown, MAX_SHOULDER_COOLDOWN));
+        this.shoulderCooldown = Math.clamp(cooldown, 0, MAX_SHOULDER_COOLDOWN);
     }
 
     public float getCarryDistance() {
@@ -437,7 +493,7 @@ public class GeckoEntity extends BaseGeckoEntity {
     }
 
     public void setCarryDistance(float dist) {
-        carryDistance = Math.max(0.8F, Math.min(dist, 3F));
+        carryDistance = Math.clamp(dist, 0.8F, 3F);
     }
 
     protected boolean isServerSide() {
@@ -456,11 +512,11 @@ public class GeckoEntity extends BaseGeckoEntity {
         return this.entityData.get(VARIANT);
     }
 
-    public GeckoVariant getGeckoVariant() {
-        return GeckoVariant.byId(this.getTypeGeckoVariant() & 255);
+    public GeckoVariants getGeckoVariant() {
+        return GeckoVariants.byId(this.getTypeGeckoVariant() & 255);
     }
 
-    protected void setGeckoVariant(GeckoVariant v) {
+    public void setGeckoVariant(GeckoVariants v) {
         this.entityData.set(VARIANT, v.getId() & 255);
     }
 
@@ -472,60 +528,13 @@ public class GeckoEntity extends BaseGeckoEntity {
         return this.getHealth() < this.getMaxHealth();
     }
 
-
-    public void createHeartParticles(int count, int speed) {
-        ((ServerLevel) level()).sendParticles(ParticleTypes.HEART, getX(), getY() + 1, getZ(),
-                count, 0.3, 0.3, 0.3, speed);
-    }
-
-    private void carriedEvent() {
-        var owner = this.getOwner();
-
-        if (!(owner instanceof Player player) || !player.isAlive()) {
-            this.setCarried(false);
-            return;
-        }
-
-        this.setShoulderRiding(false);
-
-        navigation.stop();
-        setTarget(null);
-        setDeltaMovement(Vec3.ZERO);
-        fallDistance = 0;
-        setNoAi(true);
-        Vec3 eyePos = player.getEyePosition();
-        Vec3 look = player.getLookAngle().normalize();
-
-        double minDist = player.getBbWidth() + getBbWidth() + 0.35D;
-        double wantedDist = Mth.clamp(getCarryDistance(), minDist, MAX_CARRY_DISTANCE);
-
-        Vec3 target = eyePos.add(look.scale(wantedDist));
-        HitResult hit = level().clip(new ClipContext(eyePos, target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
-
-        if (hit.getType() != HitResult.Type.MISS) {
-            target =
-                    hit.getLocation()
-                            .subtract(look.scale(getBbWidth() + 0.25D));
-        }
-
-        double y = target.y - getBbHeight() / 2D;
-        Vec3 finalPos = new Vec3(target.x, y, target.z);
-        AABB box = getBoundingBox().move(finalPos.subtract(position()));
-
-        if (!level().noCollision(this, box)) {
-            return;
-        }
-
-        moveTo(finalPos.x, finalPos.y, finalPos.z, player.getYRot(), player.getXRot());
-    }
-
     @NotNull
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
-                                                 @Nullable SpawnGroupData spawnGroupData) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType spawnType,
+                                        @Nullable SpawnGroupData spawnGroupData) {
 
-        GeckoVariant variant = Util.getRandom(GeckoVariant.values(), this.random);
-        this.setGeckoVariant(variant);
+        GeckoVariants geckoVariant = GeckoVariants.selectRandomGeckoVariant(this.random);
+        this.setGeckoVariant(geckoVariant);
 
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }

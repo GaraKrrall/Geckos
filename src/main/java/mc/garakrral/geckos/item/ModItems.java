@@ -1,8 +1,17 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.item;
 
 import net.minecraft.world.item.Item;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.entity.ModEntities;
 import mc.garakrral.geckos.item.feature.SimpleItem;
 
@@ -11,7 +20,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModItems {
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Main.MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Geckos.MODID);
 
     public static final DeferredItem<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg",
             () -> new DeferredSpawnEggItem(ModEntities.GECKO, 0x31afaf, 0xffac00,

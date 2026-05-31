@@ -1,3 +1,12 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.entity;
 
 import java.util.function.Supplier;
@@ -6,7 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.entity.custom.FlyEntity;
 import mc.garakrral.geckos.entity.custom.GeckoEntity;
 
@@ -14,7 +23,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-            DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Main.MODID);
+            DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Geckos.MODID);
 
     public static final Supplier<EntityType<GeckoEntity>> GECKO =
             ENTITY_TYPES.register("gecko", () -> EntityType.Builder.of(GeckoEntity::new, MobCategory.CREATURE)

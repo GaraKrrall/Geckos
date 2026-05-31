@@ -1,3 +1,12 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.block;
 
 import java.util.function.Supplier;
@@ -9,18 +18,18 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.block.feature.SimpleLeavesBlock;
 import mc.garakrral.geckos.block.feature.SimplePlanksBlock;
 import mc.garakrral.geckos.block.feature.SimpleRotatedPillarBlock;
 import mc.garakrral.geckos.item.ModItems;
-import mc.garakrral.geckos.worldgen.tree.ModTreeGrowers;
+
 
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModBlocks {
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Main.MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Geckos.MODID);
 
     public static final DeferredBlock<Block> RED_WOOD_LOG = registerBlock("red_wood_log",
             () -> new SimpleRotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)));
@@ -41,8 +50,6 @@ public class ModBlocks {
     public static final DeferredBlock<Block> RED_WOOD_LEAVES = registerBlock("red_wood_leaves",
             () -> new SimpleLeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
 
-    public static final DeferredBlock<Block> RED_WOOD_SAPLING = registerBlock("red_wood_sapling",
-            () -> new SaplingBlock(ModTreeGrowers.RED_TREE_GROWER ,BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING)));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
       DeferredBlock<T> toReturn = BLOCKS.register(name, block);

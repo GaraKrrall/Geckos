@@ -1,7 +1,16 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.gui.screen;
 
-import mc.garakrral.geckos.ModConfig;
-import mc.garakrral.geckos.entity.client.keybind.KeyBindings;
+import mc.garakrral.geckos.GeckosConfig;
+import mc.garakrral.geckos.client.keybind.KeyBindings;
 
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -32,33 +41,33 @@ public class GeckoConfigScreen {
                 .append(Component.literal(" in-game to move the Gecko HUD"))
                 .withStyle(ChatFormatting.GRAY)).build());
 
-        hud.addEntry(e.startBooleanToggle(Component.literal("Show Gecko Name"), ModConfig.SHOW_GECKO_NAME.get())
+        hud.addEntry(e.startBooleanToggle(Component.literal("Show Gecko Name"), GeckosConfig.SHOW_GECKO_NAME.get())
                 .setDefaultValue(true)
-                .setSaveConsumer(ModConfig.SHOW_GECKO_NAME::set)
+                .setSaveConsumer(GeckosConfig.SHOW_GECKO_NAME::set)
                 .build());
 
-        hud.addEntry(e.startBooleanToggle(Component.literal("Show Tooltip Background"), ModConfig.SHOW_BACKGROUND.get())
+        hud.addEntry(e.startBooleanToggle(Component.literal("Show Tooltip Background"), GeckosConfig.SHOW_BACKGROUND.get())
                 .setDefaultValue(true)
-                .setSaveConsumer(ModConfig.SHOW_BACKGROUND::set)
+                .setSaveConsumer(GeckosConfig.SHOW_BACKGROUND::set)
                 .build());
 
-        hud.addEntry(e.startBooleanToggle(Component.literal("Show Sleep Text"), ModConfig.SHOW_SLEEP_TEXT.get())
+        hud.addEntry(e.startBooleanToggle(Component.literal("Show Sleep Text"), GeckosConfig.SHOW_SLEEP_TEXT.get())
                 .setDefaultValue(true)
-                .setSaveConsumer(ModConfig.SHOW_SLEEP_TEXT::set)
+                .setSaveConsumer(GeckosConfig.SHOW_SLEEP_TEXT::set)
                 .build());
 
-        hud.addEntry(e.startBooleanToggle(Component.literal("Show Gecko HUD"), ModConfig.SHOW_HUD.get())
+        hud.addEntry(e.startBooleanToggle(Component.literal("Show Gecko HUD"), GeckosConfig.SHOW_HUD.get())
                 .setDefaultValue(true)
-                .setSaveConsumer(ModConfig.SHOW_HUD::set)
+                .setSaveConsumer(GeckosConfig.SHOW_HUD::set)
                 .build());
 
         builder.setSavingRunnable(() -> {
-            ModConfig.HUD_X.save();
-            ModConfig.HUD_Y.save();
-            ModConfig.SHOW_GECKO_NAME.save();
-            ModConfig.SHOW_BACKGROUND.save();
-            ModConfig.SHOW_SLEEP_TEXT.save();
-            ModConfig.SHOW_HUD.save();
+            GeckosConfig.HUD_X.save();
+            GeckosConfig.HUD_Y.save();
+            GeckosConfig.SHOW_GECKO_NAME.save();
+            GeckosConfig.SHOW_BACKGROUND.save();
+            GeckosConfig.SHOW_SLEEP_TEXT.save();
+            GeckosConfig.SHOW_HUD.save();
         });
 
         return builder.build();

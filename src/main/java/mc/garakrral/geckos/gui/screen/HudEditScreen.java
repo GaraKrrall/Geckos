@@ -1,7 +1,17 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.gui.screen;
 
-import mc.garakrral.geckos.Main;
-import mc.garakrral.geckos.ModConfig;
+import mc.garakrral.geckos.Geckos;
+import mc.garakrral.geckos.GeckosConfig;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -17,7 +27,7 @@ import java.util.List;
 public class HudEditScreen extends Screen {
 
     private static final ResourceLocation BOOK_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Main.MODID, "textures/gui/gecko_hud/gecko_paper_old.png");
+            ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "textures/gui/gecko_hud/gecko_paper_old.png");
 
     private int x;
     private int y;
@@ -27,17 +37,17 @@ public class HudEditScreen extends Screen {
 
     public HudEditScreen() {
         super(Component.literal("HUD Editor"));
-        x = ModConfig.HUD_X.get();
-        y = ModConfig.HUD_Y.get();
+        x = GeckosConfig.HUD_X.get();
+        y = GeckosConfig.HUD_Y.get();
     }
 
     @Override
     protected void init() {
         addRenderableWidget(Button.builder(Component.literal("Save"), b -> {
-            ModConfig.HUD_X.set(x);
-            ModConfig.HUD_Y.set(y);
-            ModConfig.HUD_X.save();
-            ModConfig.HUD_Y.save();
+            GeckosConfig.HUD_X.set(x);
+            GeckosConfig.HUD_Y.set(y);
+            GeckosConfig.HUD_X.save();
+            GeckosConfig.HUD_Y.save();
             onClose();
         }).bounds(width / 2 - 40, height - 28, 80, 20).build());
     }

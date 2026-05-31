@@ -1,3 +1,12 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.datagen;
 
 import java.util.Set;
@@ -23,10 +32,6 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.STRIPPED_RED_WOOD_LOG.get());
         this.dropSelf(ModBlocks.STRIPPED_RED_WOOD.get());
         this.dropSelf(ModBlocks.RED_WOOD.get());
-        this.dropSelf(ModBlocks.RED_WOOD_SAPLING.get());
-
-        this.add(ModBlocks.RED_WOOD_LEAVES.get(), block ->
-                createLeavesDrops(block, ModBlocks.RED_WOOD_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
 
     }
 

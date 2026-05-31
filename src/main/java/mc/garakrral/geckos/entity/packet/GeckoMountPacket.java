@@ -1,6 +1,15 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.entity.packet;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.attachment.ModAttachments;
 import mc.garakrral.geckos.entity.custom.GeckoEntity;
 
@@ -25,7 +34,7 @@ public record GeckoMountPacket(int entityId, MountType mountType) implements Cus
 
     public static final CustomPacketPayload.Type<GeckoMountPacket> TYPE =
             new CustomPacketPayload.Type<>(
-                    ResourceLocation.fromNamespaceAndPath(Main.MODID, "gecko_mount")
+                    ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "gecko_mount")
             );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, GeckoMountPacket> CODEC =

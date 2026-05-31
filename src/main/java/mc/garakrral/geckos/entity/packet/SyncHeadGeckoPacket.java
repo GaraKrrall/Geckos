@@ -1,6 +1,15 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.entity.packet;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.attachment.ModAttachments;
 
 import net.minecraft.client.Minecraft;
@@ -19,7 +28,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 public record SyncHeadGeckoPacket(int playerId, CompoundTag tag) implements CustomPacketPayload {
 
     public static final Type<SyncHeadGeckoPacket> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(Main.MODID, "sync_head_gecko"));
+            new Type<>(ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "sync_head_gecko"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncHeadGeckoPacket> CODEC =
             StreamCodec.composite(

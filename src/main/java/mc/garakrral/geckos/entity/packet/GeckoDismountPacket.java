@@ -1,6 +1,15 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.entity.packet;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.attachment.ModAttachments;
 import mc.garakrral.geckos.entity.custom.GeckoEntity;
 
@@ -17,7 +26,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 public record GeckoDismountPacket() implements CustomPacketPayload {
 
     public static final Type<GeckoDismountPacket> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(Main.MODID, "gecko_dismount"));
+            new Type<>(ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "gecko_dismount"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, GeckoDismountPacket> CODEC =
             StreamCodec.unit(new GeckoDismountPacket());

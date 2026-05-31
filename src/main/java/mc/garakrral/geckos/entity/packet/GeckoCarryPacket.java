@@ -1,6 +1,15 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.entity.packet;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.entity.custom.GeckoEntity;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -18,7 +27,7 @@ public record GeckoCarryPacket(int geckoId, boolean carry)
 
     public static final Type<GeckoCarryPacket> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(
-                    Main.MODID,
+                    Geckos.MODID,
                     "gecko_carry"
             ));
 

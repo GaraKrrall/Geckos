@@ -1,6 +1,16 @@
+/*
+ *
+ * Copyright (c) 2026 GaraKrral
+ *
+ * Licensed under the GPLv3 License.
+ * See LICENSE file in the project root for full license information.
+ *
+ */
+
 package mc.garakrral.geckos.attachment;
 
-import mc.garakrral.geckos.Main;
+import mc.garakrral.geckos.Geckos;
+
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -12,7 +22,7 @@ import java.util.function.Supplier;
 public class ModAttachments {
 
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
-            DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Main.MODID);
+            DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Geckos.MODID);
 
     public static final Supplier<AttachmentType<CompoundTag>> HEAD_GECKO =
             ATTACHMENT_TYPES.register("head_gecko",

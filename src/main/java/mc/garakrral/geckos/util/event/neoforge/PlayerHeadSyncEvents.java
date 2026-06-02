@@ -10,7 +10,7 @@
 package mc.garakrral.geckos.util.event.neoforge;
 
 import mc.garakrral.geckos.Geckos;
-import mc.garakrral.geckos.entity.packet.SyncHeadGeckoPacket;
+import mc.garakrral.geckos.client.packet.SyncHeadGeckoPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

@@ -11,11 +11,11 @@ package mc.garakrral.geckos.entity.handler;
 
 import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.client.keybind.KeyBindings;
-import mc.garakrral.geckos.entity.packet.GeckoCarryPacket;
-import mc.garakrral.geckos.entity.packet.GeckoDismountPacket;
-import mc.garakrral.geckos.entity.packet.GeckoMountPacket;
+import mc.garakrral.geckos.client.packet.GeckoCarryPacket;
+import mc.garakrral.geckos.client.packet.GeckoDismountPacket;
+import mc.garakrral.geckos.client.packet.GeckoMountPacket;
 import mc.garakrral.geckos.entity.animal.GeckoEntity;
-import mc.garakrral.geckos.gui.screen.HudEditScreen;
+import mc.garakrral.geckos.client.gui.screen.HudEditScreen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.EntityHitResult;

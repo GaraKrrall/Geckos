@@ -13,7 +13,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import mc.garakrral.geckos.attachment.ModAttachments;
-import mc.garakrral.geckos.client.resources.GeckoResourceLocation;
+import mc.garakrral.geckos.resources.GeckoResourceLocation;
 import mc.garakrral.geckos.entity.ModEntities;
 import mc.garakrral.geckos.client.model.GeckoModel;
 import mc.garakrral.geckos.entity.animal.GeckoEntity;
@@ -55,7 +55,7 @@ public class GeckoOnHeadLayer<T extends Player> extends RenderLayer<T, PlayerMod
         pose.scale(0.9F, 0.9F, 0.9F);
 
         GeckoVariants variant = gecko.getGeckoVariant();
-        ResourceLocation tex = GeckoResourceLocation.GECKO_RESOURCE_LOCATION_MAP.getOrDefault(variant, GeckoResourceLocation.GECKO_RESOURCE_LOCATION_MAP.get(GeckoVariants.GREEN));
+        ResourceLocation tex = GeckoResourceLocation.getGeckoTextureFromResources(variant);
         VertexConsumer vc = buffer.getBuffer(model.renderType(tex));
 
         model.renderOnShoulder(pose, vc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

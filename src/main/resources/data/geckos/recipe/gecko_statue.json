@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SYS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stone"
+    },
+    "Y": {
+      "item": "geckos:dead_fly"
+    }
+  },
+  "result": {
+    "id": "geckos:gecko_statue",
+    "count": 1
+  }
+}

@@ -10,6 +10,7 @@
 package mc.garakrral.geckos.entity.variant;
 
 import mc.garakrral.geckos.entity.animal.GeckoEntity;
+import mc.garakrral.geckos.resources.GeckoResourceLocation;
 
 import net.minecraft.Util;
 import net.minecraft.util.RandomSource;
@@ -18,13 +19,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public enum GeckoVariants {
-    BLUE(0),
-    GREEN(1),
-    PINK(2),
-    BROWN(3),
-    RED(4),
-    PHANTOM(5),
-    @Deprecated(since = "0.1.1") NETHER_BASALT(6);
+    BLUE(0, GeckoResourceLocation.Resources.GECKO_VARIANT_BLUE),
+    GREEN(1, GeckoResourceLocation.Resources.GECKO_VARIANT_GREEN),
+    PINK(2, GeckoResourceLocation.Resources.GECKO_VARIANT_PINK),
+    BROWN(3, GeckoResourceLocation.Resources.GECKO_VARIANT_BROWN),
+    RED(4, GeckoResourceLocation.Resources.GECKO_VARIANT_RED),
+    PHANTOM(5, GeckoResourceLocation.Resources.GECKO_VARIANT_PHANTOM),
+    @Deprecated(since = "0.1.1") NETHER_BASALT(6, GeckoResourceLocation.Resources.NULL);
 
     private static final GeckoVariants[] BY_ID = Arrays.stream(values()).sorted(
             Comparator.comparingInt(GeckoVariants::getId)).toArray(GeckoVariants[]::new);
@@ -34,21 +35,26 @@ public enum GeckoVariants {
                     .filter(v -> v != GeckoVariants.NETHER_BASALT)
                     .toArray(GeckoVariants[]::new);
 
+    private final int id;
+    private final GeckoResourceLocation.Resources resources;
+
+    GeckoVariants(int id, GeckoResourceLocation.Resources resources) {
+        this.id = id;
+        this.resources = resources;
+    }
+
     public static GeckoVariants selectRandomGeckoVariant(RandomSource randomSource) {
         return Util.getRandom(GeckoVariants.SPAWNABLE_VARIANTS, randomSource);
     }
 
     public static void changeRemovedVariants(GeckoEntity gecko, RandomSource randomSource) {
-        GeckoVariants geckoVariant = gecko.getGeckoVariant();
-        if (geckoVariant ==  NETHER_BASALT) {
+        if (gecko.getGeckoVariant() == NETHER_BASALT) {
             gecko.setGeckoVariant(selectRandomGeckoVariant(randomSource));
         }
     }
 
-    private final int id;
-
-    GeckoVariants(int id) {
-        this.id = id;
+    public GeckoResourceLocation.Resources getGeckoResourceLocation() {
+        return this.resources;
     }
 
     public int getId() {

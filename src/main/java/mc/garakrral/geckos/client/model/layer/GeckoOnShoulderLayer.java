@@ -10,7 +10,7 @@
 package mc.garakrral.geckos.client.model.layer;
 
 import mc.garakrral.geckos.client.model.GeckoModel;
-import mc.garakrral.geckos.client.resources.GeckoResourceLocation;
+import mc.garakrral.geckos.resources.GeckoResourceLocation;
 import mc.garakrral.geckos.entity.variant.GeckoVariants;
 
 import net.minecraft.client.model.PlayerModel;
@@ -52,7 +52,7 @@ public class GeckoOnShoulderLayer<T extends Player> extends RenderLayer<T, Playe
         poseStack.translate(left ? 0.4F : -0.4F, player.isCrouching() ? -1.3F : -1.5F, 0.0F);
 
         GeckoVariants variant = getVariantFromNBT(tag);
-        ResourceLocation texture = GeckoResourceLocation.GECKO_RESOURCE_LOCATION_MAP.getOrDefault(variant, GeckoResourceLocation.GECKO_RESOURCE_LOCATION_MAP.get(GeckoVariants.GREEN));
+        ResourceLocation texture = GeckoResourceLocation.getGeckoTextureFromResources(variant);
 
         VertexConsumer vc = buffer.getBuffer(variant == GeckoVariants.PHANTOM ? RenderType.entityTranslucent(texture) : model.renderType(texture));
 

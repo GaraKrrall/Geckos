@@ -14,9 +14,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.client.model.FlyModel;
 import mc.garakrral.geckos.entity.animal.FlyEntity;
+import mc.garakrral.geckos.resources.GeckoResourceLocation;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ public class FlyRenderer extends MobRenderer<FlyEntity, FlyModel<FlyEntity>> {
     @NotNull
     @Override
     public ResourceLocation getTextureLocation(FlyEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "textures/entity/fly/fly.png");
+        return GeckoResourceLocation.getFromResources(GeckoResourceLocation.Resources.FLY);
     }
 
     @Override

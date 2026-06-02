@@ -24,7 +24,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class GeckoStatueBlock extends Block {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    private static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 6, 14);
+
+    private static final VoxelShape NORTH_SHAPE = Block.box(4, 0, 4, 12, 6, 14);
+    private static final VoxelShape SOUTH_SHAPE = Block.box(4, 0, 2, 12, 6, 12);
+    private static final VoxelShape EAST_SHAPE  = Block.box(2, 0, 4, 12, 6, 12);
+    private static final VoxelShape WEST_SHAPE  = Block.box(4, 0, 4, 14, 6, 12);
 
     public GeckoStatueBlock(Properties properties) {
         super(properties);
@@ -44,6 +48,12 @@ public class GeckoStatueBlock extends Block {
 
     @Override
     protected @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return SHAPE;
+        return switch (state.getValue(FACING)) {
+            case NORTH -> NORTH_SHAPE;
+            case SOUTH -> SOUTH_SHAPE;
+            case EAST -> EAST_SHAPE;
+            case WEST -> WEST_SHAPE;
+            default -> NORTH_SHAPE;
+        };
     }
 }

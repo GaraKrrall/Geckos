@@ -9,7 +9,7 @@
 
 package mc.garakrral.geckos.util.function;
 
-import mc.garakrral.geckos.gui.screen.GeckoConfigScreen;
+import mc.garakrral.geckos.client.gui.screen.GeckoConfigScreen;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;

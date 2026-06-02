@@ -9,7 +9,7 @@
 
 package mc.garakrral.geckos.client.renderer;
 
-import mc.garakrral.geckos.client.resources.GeckoResourceLocation;
+import mc.garakrral.geckos.resources.GeckoResourceLocation;
 import mc.garakrral.geckos.client.model.GeckoModel;
 import mc.garakrral.geckos.entity.animal.GeckoEntity;
 import mc.garakrral.geckos.entity.variant.GeckoVariants;
@@ -29,8 +29,8 @@ public class GeckoRenderer extends MobRenderer<GeckoEntity, GeckoModel<GeckoEnti
 
     @NotNull
     @Override
-    public ResourceLocation getTextureLocation(GeckoEntity entity) {
-        return GeckoResourceLocation.GECKO_RESOURCE_LOCATION_MAP.get(entity.getGeckoVariant());
+    public ResourceLocation getTextureLocation(@NotNull GeckoEntity entity) {
+        return GeckoResourceLocation.getGeckoTextureFromResources(entity);
     }
 
     @Override

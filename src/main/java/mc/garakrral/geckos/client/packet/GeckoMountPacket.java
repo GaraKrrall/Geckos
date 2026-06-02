@@ -7,7 +7,7 @@
  *
  */
 
-package mc.garakrral.geckos.entity.packet;
+package mc.garakrral.geckos.client.packet;
 
 import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.attachment.ModAttachments;

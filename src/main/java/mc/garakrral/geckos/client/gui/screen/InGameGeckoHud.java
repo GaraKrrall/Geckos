@@ -7,13 +7,15 @@
  *
  */
 
-package mc.garakrral.geckos.gui.screen;
+package mc.garakrral.geckos.client.gui.screen;
 
 import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.GeckosConfig;
 import mc.garakrral.geckos.attachment.ModAttachments;
 import mc.garakrral.geckos.client.keybind.KeyBindings;
 import mc.garakrral.geckos.entity.animal.GeckoEntity;
+import mc.garakrral.geckos.resources.GeckoResourceLocation;
+import mc.garakrral.geckos.resources.GeckoResourceLocation.Resources;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -35,9 +37,7 @@ import java.util.List;
 @EventBusSubscriber(modid = Geckos.MODID, value = Dist.CLIENT)
 public class InGameGeckoHud {
 
-    private static final ResourceLocation BOOK_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "textures/gui/gecko_hud/gecko_paper.png");
-
+    private static final ResourceLocation BOOK_TEXTURE = GeckoResourceLocation.getFromResources(Resources.GECKO_PAPER);
     @SubscribeEvent
     public static void render(RenderGuiEvent.Post e) {
         Minecraft mc = Minecraft.getInstance();

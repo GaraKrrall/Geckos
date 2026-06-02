@@ -19,7 +19,7 @@ import mc.garakrral.geckos.client.model.FlyModel;
 import mc.garakrral.geckos.client.model.GeckoModel;
 import mc.garakrral.geckos.entity.animal.FlyEntity;
 import mc.garakrral.geckos.entity.animal.GeckoEntity;
-import mc.garakrral.geckos.entity.packet.ModPackets;
+import mc.garakrral.geckos.client.packet.ModPackets;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

@@ -7,7 +7,7 @@
  *
  */
 
-package mc.garakrral.geckos.entity.packet;
+package mc.garakrral.geckos.client.packet;
 
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 

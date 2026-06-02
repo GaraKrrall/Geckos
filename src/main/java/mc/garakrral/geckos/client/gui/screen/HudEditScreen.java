@@ -7,10 +7,11 @@
  *
  */
 
-package mc.garakrral.geckos.gui.screen;
+package mc.garakrral.geckos.client.gui.screen;
 
-import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.GeckosConfig;
+import mc.garakrral.geckos.resources.GeckoResourceLocation;
+import mc.garakrral.geckos.resources.GeckoResourceLocation.Resources;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -26,8 +27,7 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public class HudEditScreen extends Screen {
 
-    private static final ResourceLocation BOOK_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "textures/gui/gecko_hud/gecko_paper_old.png");
+    private static final ResourceLocation BOOK_TEXTURE = GeckoResourceLocation.getFromResources(Resources.GECKO_PAPER_OLD);
 
     private int x;
     private int y;

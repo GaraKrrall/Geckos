@@ -9,6 +9,9 @@
 
 package mc.garakrral.geckos.entity.animal;
 
+import mc.garakrral.geckos.entity.goal.RandomFlyGoal;
+import mc.garakrral.geckos.item.ModItems;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
@@ -25,9 +28,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-
-import mc.garakrral.geckos.entity.goal.RandomFlyGoal;
-import mc.garakrral.geckos.item.ModItems;
+import org.jetbrains.annotations.NotNull;
 
 public class FlyEntity extends PathfinderMob implements FlyingAnimal {
     public FlyEntity(EntityType<? extends FlyEntity> t, Level l) {
@@ -56,7 +57,7 @@ public class FlyEntity extends PathfinderMob implements FlyingAnimal {
     }
 
     @Override
-    protected PathNavigation createNavigation(Level level) {
+    protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
         return new FlyingPathNavigation(this, level);
     }
 
@@ -68,7 +69,7 @@ public class FlyEntity extends PathfinderMob implements FlyingAnimal {
     }
 
     @Override
-    public void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+    public void dropCustomDeathLoot(@NotNull ServerLevel level, @NotNull DamageSource damageSource, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, damageSource, recentlyHit);
         this.spawnAtLocation(ModItems.DEAD_FLY);
     }

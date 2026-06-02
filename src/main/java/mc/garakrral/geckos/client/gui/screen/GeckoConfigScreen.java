@@ -7,7 +7,7 @@
  *
  */
 
-package mc.garakrral.geckos.gui.screen;
+package mc.garakrral.geckos.client.gui.screen;
 
 import mc.garakrral.geckos.GeckosConfig;
 import mc.garakrral.geckos.client.keybind.KeyBindings;

@@ -19,6 +19,13 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/**
+ * Central item registry declarations for the mod.
+ *
+ * <p>This class groups all deferred item registrations, including spawn eggs and simple crafting
+ * ingredients. Keeping them together simplifies registry discovery and avoids scattering bootstrap
+ * logic across unrelated gameplay classes.
+ */
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Geckos.MODID);
 

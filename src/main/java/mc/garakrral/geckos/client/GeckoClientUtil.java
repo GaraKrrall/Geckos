@@ -20,9 +20,21 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+/**
+ * Client-only visual helpers for gecko-specific interactions.
+ *
+ * <p>These methods provide immediate feedback that does not need to wait for an authoritative
+ * server response, while still mirroring the same geometric rules closely enough to feel stable to
+ * the player.
+ */
 @OnlyIn(Dist.CLIENT)
 public class GeckoClientUtil {
 
+    /**
+     * Repositions a carried gecko locally to preview its server-calculated carry position.
+     *
+     * @param gecko carried gecko entity being previewed on the client
+     */
     public static void clientCarryPreview(GeckoEntity gecko) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;

@@ -43,6 +43,12 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Core gecko mob implementation covering taming, carrying, sleeping, breeding, and shoulder logic.
+ *
+ * <p>This entity combines normal tameable-animal behavior with several custom interaction states
+ * such as being carried, mounted on a player's head, and autonomous sleep handling.
+ */
 public class GeckoEntity extends ShoulderRidingEntity {
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState swimAnimationState = new AnimationState();
@@ -86,10 +92,19 @@ public class GeckoEntity extends ShoulderRidingEntity {
     public static final float MIN_CARRY_DISTANCE = 1.2F;
     public static final float MAX_CARRY_DISTANCE = 3.0F;
 
+    /**
+     * Creates a gecko entity instance.
+     *
+     * @param entityType entity type definition
+     * @param level current level
+     */
     public GeckoEntity(EntityType<? extends ShoulderRidingEntity> entityType, Level level) {
         super(entityType, level);
     }
 
+    /**
+     * Registers all AI and target goals used by the gecko.
+     */
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -109,6 +124,11 @@ public class GeckoEntity extends ShoulderRidingEntity {
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, FlyEntity.class, true));
     }
 
+    /**
+     * Builds the attribute set used by gecko entities.
+     *
+     * @return mutable attribute builder for geckos
+     */
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 10d)
@@ -117,11 +137,24 @@ public class GeckoEntity extends ShoulderRidingEntity {
                 .add(Attributes.ATTACK_DAMAGE, 2.0D);
     }
 
+    /**
+     * Checks whether the supplied item is valid gecko food.
+     *
+     * @param food tested item stack
+     * @return {@code true} when the stack is a dead fly
+     */
     @Override
     public boolean isFood(ItemStack food) {
         return food.is(ModItems.DEAD_FLY);
     }
 
+    /**
+     * Creates offspring during breeding and inherits one parent's variant.
+     *
+     * @param level server level creating the child
+     * @param partner breeding partner
+     * @return spawned baby gecko or {@code null} if creation failed
+     */
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob partner) {
@@ -142,6 +175,9 @@ public class GeckoEntity extends ShoulderRidingEntity {
         return babyGecko;
     }
 
+    /**
+     * Starts and stops animation states based on the gecko's current movement and sleep state.
+     */
     protected void setupAnimationStates() {
         boolean sleeping = this.isSleepingGecko();
         boolean inWater = this.isInWaterOrBubble();
@@ -180,6 +216,10 @@ public class GeckoEntity extends ShoulderRidingEntity {
         }
     }
 
+    /**
+     * Advances gecko behavior each tick, including carry logic, sleep checks, and client preview
+     * updates.
+     */
     @Override
     public void tick() {
         super.tick();
@@ -240,11 +280,23 @@ public class GeckoEntity extends ShoulderRidingEntity {
         if (shoulderCooldown > 0) shoulderCooldown--;
     }
 
+    /**
+     * Treats sleeping or sitting geckos as immobile.
+     *
+     * @return {@code true} when the gecko should not move
+     */
     @Override
     protected boolean isImmobile() {
         return this.isSleepingGecko() || this.isSittingGecko() || super.isImmobile();
     }
 
+    /**
+     * Prevents passenger geckos from taking damage.
+     *
+     * @param source damage source
+     * @param amount incoming damage amount
+     * @return {@code true} if damage was applied
+     */
     @Override
     public boolean hurt(@NotNull DamageSource source, float amount) {
         if (this.isPassenger()) {
@@ -253,6 +305,11 @@ public class GeckoEntity extends ShoulderRidingEntity {
         return super.hurt(source, amount);
     }
 
+    /**
+     * Defines the synchronized entity data tracked for gecko state.
+     *
+     * @param builder synched data builder
+     */
     @Override
     protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         super.defineSynchedData(builder);
@@ -265,6 +322,13 @@ public class GeckoEntity extends ShoulderRidingEntity {
         builder.define(CARRIED, false);
     }
 
+    /**
+     * Handles direct player interaction with the gecko.
+     *
+     * @param player interacting player
+     * @param hand hand used for interaction
+     * @return interaction result indicating whether the action was consumed
+     */
     @NotNull
     @Override
     public InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
@@ -283,6 +347,11 @@ public class GeckoEntity extends ShoulderRidingEntity {
         return super.mobInteract(player, hand);
     }
 
+    /**
+     * Writes custom gecko state to NBT for persistence.
+     *
+     * @param tag destination compound tag
+     */
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
@@ -295,6 +364,11 @@ public class GeckoEntity extends ShoulderRidingEntity {
         tag.putBoolean("Carried", this.isCarried());
     }
 
+    /**
+     * Reads custom gecko state back from NBT.
+     *
+     * @param tag source compound tag
+     */
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
@@ -323,6 +397,13 @@ public class GeckoEntity extends ShoulderRidingEntity {
         }
     }
 
+    /**
+     * Routes dead-fly interactions into taming, healing, or breeding behavior.
+     *
+     * @param player interacting player
+     * @param item held item stack
+     * @return interaction result for the attempted action
+     */
     private InteractionResult handleDeadFlyInteraction(Player player, ItemStack item) {
         if (!item.is(ModItems.DEAD_FLY.get())) {
             return InteractionResult.PASS;
@@ -347,6 +428,13 @@ public class GeckoEntity extends ShoulderRidingEntity {
         return InteractionResult.PASS;
     }
 
+    /**
+     * Attempts to tame the gecko using a dead fly.
+     *
+     * @param player player attempting the tame
+     * @param item consumed item
+     * @return success result for the interaction
+     */
     private InteractionResult tameGecko(Player player, ItemStack item) {
         if (this.isServerSide()) {
             if (this.random.nextInt(TAME_CHANCE) == 0) {
@@ -364,6 +452,13 @@ public class GeckoEntity extends ShoulderRidingEntity {
         return InteractionResult.SUCCESS;
     }
 
+    /**
+     * Heals the gecko and spawns heart particles.
+     *
+     * @param player interacting player
+     * @param item consumed item
+     * @return success result for the interaction
+     */
     private InteractionResult healGecko(Player player, ItemStack item) {
         if (this.isServerSide()) {
             this.heal(1.0F);
@@ -376,6 +471,13 @@ public class GeckoEntity extends ShoulderRidingEntity {
         return InteractionResult.SUCCESS;
     }
 
+    /**
+     * Places the gecko into love mode for breeding.
+     *
+     * @param player interacting player
+     * @param item consumed item
+     * @return interaction result
+     */
     private InteractionResult breedGecko(Player player, ItemStack item) {
         if (this.isBaby()) {
             return InteractionResult.FAIL;
@@ -390,6 +492,12 @@ public class GeckoEntity extends ShoulderRidingEntity {
         return InteractionResult.SUCCESS;
     }
 
+    /**
+     * Toggles the gecko's sitting state when its owner interacts with an empty hand.
+     *
+     * @param player interacting player
+     * @return interaction result describing whether the sit toggle ran
+     */
     private InteractionResult handleSitInteraction(Player player) {
         if (!this.isTame() || !player.getMainHandItem().isEmpty()) {
             return InteractionResult.PASS;
@@ -413,68 +521,149 @@ public class GeckoEntity extends ShoulderRidingEntity {
         return InteractionResult.SUCCESS;
     }
 
+    /**
+     * Checks whether the gecko is currently eligible to be tamed.
+     *
+     * @return {@code true} if taming can proceed
+     */
     private boolean canBeTamed() {
         return !this.isTame() && !this.isSleepingGecko() && !this.isSittingGecko();
     }
 
+    /**
+     * Checks whether the gecko is eligible to be healed by the held item.
+     *
+     * @return {@code true} if healing can proceed
+     */
     private boolean canBeHealed() {
         return this.isInjured() && this.isTame() && !this.isSleepingGecko() && !this.isSittingGecko();
     }
 
+    /**
+     * Checks whether the gecko can currently enter breeding state.
+     *
+     * @return {@code true} if breeding conditions are satisfied
+     */
     public boolean canBreed() {
         return this.isTame() && this.getAge() == 0 && !this.isInLove() && !this.isSleepingGecko() && !this.isSittingGecko() && this.isMaxHealth();
     }
 
+    /**
+     * Consumes one item from the stack unless the player is in creative mode.
+     *
+     * @param player consuming player
+     * @param stack item stack to shrink
+     */
     private static void consumeItem(Player player, ItemStack stack) {
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
     }
 
+    /**
+     * Returns whether the gecko is currently sleeping.
+     *
+     * @return sleeping flag
+     */
     public boolean isSleepingGecko() {
         return this.entityData.get(SLEEPING);
     }
 
+    /**
+     * Updates the sleeping flag.
+     *
+     * @param s new sleeping state
+     */
     public void setSleepingGecko(boolean s) {
         this.entityData.set(SLEEPING, s);
     }
 
+    /**
+     * Returns whether the gecko is stored in a shoulder-riding state.
+     *
+     * @return shoulder-riding flag
+     */
     public boolean isShoulderRiding() {
         return this.entityData.get(SHOULDER_RIDING);
     }
 
+    /**
+     * Updates the shoulder-riding flag.
+     *
+     * @param os new shoulder-riding state
+     */
     public void setShoulderRiding(boolean os) {
         this.entityData.set(SHOULDER_RIDING, os);
     }
 
+    /**
+     * Returns whether the gecko is sitting.
+     *
+     * @return sitting flag
+     */
     public boolean isSittingGecko() {
         return this.entityData.get(SITTING);
     }
 
+    /**
+     * Updates the sitting flag.
+     *
+     * @param sit new sitting state
+     */
     public void setSittingGecko(boolean sit) {
         this.entityData.set(SITTING, sit);
     }
 
+    /**
+     * Returns whether the gecko is forced into the morning-sleeping state.
+     *
+     * @return morning sleeping flag
+     */
     public boolean isMorningSleeping() {
         return this.entityData.get(MORNING_SLEEPING);
     }
 
+    /**
+     * Updates the morning-sleeping flag.
+     *
+     * @param morningSleeping new flag value
+     */
     public void setMorningSleeping(boolean morningSleeping) {
         this.entityData.set(MORNING_SLEEPING, morningSleeping);
     }
 
+    /**
+     * Returns whether the gecko is stored as head-mounted data.
+     *
+     * @return head-mounted flag
+     */
     public boolean isOnHead() {
         return this.entityData.get(ON_HEAD);
     }
 
+    /**
+     * Updates the head-mounted flag.
+     *
+     * @param onHead new head-mounted state
+     */
     public void setOnHead(boolean onHead) {
         this.entityData.set(ON_HEAD, onHead);
     }
 
+    /**
+     * Returns whether the gecko is currently being carried.
+     *
+     * @return carry flag
+     */
     public boolean isCarried() {
         return this.entityData.get(CARRIED);
     }
 
+    /**
+     * Updates the carried flag and restores normal movement state when carry mode ends.
+     *
+     * @param carried new carry state
+     */
     public void setCarried(boolean carried) {
         this.entityData.set(CARRIED, carried);
 
@@ -484,50 +673,114 @@ public class GeckoEntity extends ShoulderRidingEntity {
         }
     }
 
+    /**
+     * Sets the cooldown that delays immediate remounting onto a shoulder.
+     *
+     * @param cooldown requested cooldown value
+     */
     public void setShoulderCooldown(int cooldown) {
         this.shoulderCooldown = Math.clamp(cooldown, 0, MAX_SHOULDER_COOLDOWN);
     }
 
+    /**
+     * Returns the configured carry distance.
+     *
+     * @return carry distance in blocks
+     */
     public float getCarryDistance() {
         return carryDistance;
     }
 
+    /**
+     * Updates the carry distance while clamping it to the supported range.
+     *
+     * @param dist requested carry distance
+     */
     public void setCarryDistance(float dist) {
         carryDistance = Math.clamp(dist, 0.8F, 3F);
     }
 
+    /**
+     * Convenience helper indicating whether logic is running on the server.
+     *
+     * @return {@code true} on the logical server
+     */
     protected boolean isServerSide() {
         return !this.level().isClientSide;
     }
 
+    /**
+     * Convenience helper indicating whether logic is running on the client.
+     *
+     * @return {@code true} on the logical client
+     */
     protected boolean isClientSide() {
         return this.level().isClientSide;
     }
 
+    /**
+     * Returns whether the gecko currently has an attack target.
+     *
+     * @return {@code true} if the target reference is non-null
+     */
     public boolean hasTarget() {
         return this.getTarget() != null;
     }
 
+    /**
+     * Returns the raw integer variant id stored in synced data.
+     *
+     * @return serialized variant id
+     */
     protected int getTypeGeckoVariant() {
         return this.entityData.get(VARIANT);
     }
 
+    /**
+     * Resolves the current gecko variant enum.
+     *
+     * @return decoded gecko variant
+     */
     public GeckoVariants getGeckoVariant() {
         return GeckoVariants.byId(this.getTypeGeckoVariant() & 255);
     }
 
+    /**
+     * Stores a new gecko variant in synchronized entity data.
+     *
+     * @param v new gecko variant
+     */
     public void setGeckoVariant(GeckoVariants v) {
         this.entityData.set(VARIANT, v.getId() & 255);
     }
 
+    /**
+     * Checks whether the gecko is at full health.
+     *
+     * @return {@code true} when current health is at least max health
+     */
     public boolean isMaxHealth() {
         return this.getHealth() >= this.getMaxHealth();
     }
 
+    /**
+     * Checks whether the gecko is below full health.
+     *
+     * @return {@code true} when the gecko can still be healed
+     */
     public boolean isInjured() {
         return this.getHealth() < this.getMaxHealth();
     }
 
+    /**
+     * Finalizes initial spawn data and assigns a random gecko variant.
+     *
+     * @param level server-level accessor used for spawning
+     * @param difficulty local difficulty data
+     * @param spawnType reason for the spawn
+     * @param spawnGroupData prior spawn group data
+     * @return final spawn group data from the superclass
+     */
     @NotNull
     @Override
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType spawnType,

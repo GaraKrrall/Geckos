@@ -24,6 +24,12 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
+/**
+ * Simple draggable editor screen for repositioning the gecko HUD.
+ *
+ * <p>The screen previews the HUD background, lets the user drag it within screen bounds, and saves
+ * the resulting coordinates back into the mod config when the user confirms.
+ */
 @OnlyIn(Dist.CLIENT)
 public class HudEditScreen extends Screen {
 
@@ -35,12 +41,18 @@ public class HudEditScreen extends Screen {
     private int dragX;
     private int dragY;
 
+    /**
+     * Creates the HUD editor screen and loads the current saved HUD position.
+     */
     public HudEditScreen() {
         super(Component.literal("HUD Editor"));
         x = GeckosConfig.HUD_X.get();
         y = GeckosConfig.HUD_Y.get();
     }
 
+    /**
+     * Builds the editor widgets, including the save button.
+     */
     @Override
     protected void init() {
         addRenderableWidget(Button.builder(Component.literal("Save"), b -> {
@@ -52,6 +64,14 @@ public class HudEditScreen extends Screen {
         }).bounds(width / 2 - 40, height - 28, 80, 20).build());
     }
 
+    /**
+     * Starts dragging the preview when the user clicks inside it.
+     *
+     * @param mx mouse X coordinate
+     * @param my mouse Y coordinate
+     * @param button mouse button id
+     * @return {@code true} if the click was consumed by the draggable preview
+     */
     @Override
     public boolean mouseClicked(double mx, double my, int button) {
         int w = 128;
@@ -66,6 +86,16 @@ public class HudEditScreen extends Screen {
         return super.mouseClicked(mx, my, button);
     }
 
+    /**
+     * Updates the preview position while dragging is active.
+     *
+     * @param mx current mouse X coordinate
+     * @param my current mouse Y coordinate
+     * @param b mouse button id
+     * @param dx X delta since the previous drag event
+     * @param dy Y delta since the previous drag event
+     * @return {@code true} if the drag event was consumed
+     */
     @Override
     public boolean mouseDragged(double mx, double my, int b, double dx, double dy) {
         if (dragging) {
@@ -76,12 +106,28 @@ public class HudEditScreen extends Screen {
         return false;
     }
 
+    /**
+     * Ends an active drag operation.
+     *
+     * @param mx release mouse X coordinate
+     * @param my release mouse Y coordinate
+     * @param b mouse button id
+     * @return always {@code true} because releasing ends the drag interaction
+     */
     @Override
     public boolean mouseReleased(double mx, double my, int b) {
         dragging = false;
         return true;
     }
 
+    /**
+     * Renders the screen background, draggable preview, and preview text.
+     *
+     * @param g GUI graphics context
+     * @param mx mouse X coordinate
+     * @param my mouse Y coordinate
+     * @param pt partial tick value
+     */
     @Override
     public void render(GuiGraphics g, int mx, int my, float pt) {
         renderBlurredBackground(pt);

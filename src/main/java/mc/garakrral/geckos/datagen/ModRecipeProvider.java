@@ -18,11 +18,25 @@ import net.minecraft.data.recipes.RecipeProvider;
 
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
+/**
+ * Generates crafting recipes for the mod.
+ */
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
+    /**
+     * Creates the recipe provider.
+     *
+     * @param output pack output target
+     * @param registries registry lookup future
+     */
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
 
+    /**
+     * Adds recipe definitions to the generated data set.
+     *
+     * @param recipeOutput recipe output sink used by the provider
+     */
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
 

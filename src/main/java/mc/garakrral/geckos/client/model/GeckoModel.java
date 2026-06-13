@@ -28,16 +28,35 @@ import mc.garakrral.geckos.entity.animal.GeckoEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+/**
+ * Hierarchical baked model used to render gecko entities and shoulder/head gecko visuals.
+ *
+ * <p>The model exposes both full in-world animation support and a simplified shoulder-render path
+ * that reuses the same geometry with reset poses. Animation selection is driven from entity state
+ * such as walking, sleeping, and swimming.
+ *
+ * @param <T> concrete gecko entity type rendered by this model
+ */
 public class GeckoModel<T extends GeckoEntity> extends HierarchicalModel<T> {
     public static final ModelLayerLocation GECKO_LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "gecko"), "main");
     private final ModelPart body;
     private final ModelPart head;
 
+    /**
+     * Creates a gecko model from the baked root model part.
+     *
+     * @param root baked root model part provided by the renderer context
+     */
     public GeckoModel(ModelPart root) {
         this.body = root.getChild("Body");
         this.head = this.body.getChild("Head");
     }
 
+    /**
+     * Builds the layer definition describing the gecko model geometry.
+     *
+     * @return complete layer definition used for baking this model
+     */
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
@@ -64,6 +83,16 @@ public class GeckoModel<T extends GeckoEntity> extends HierarchicalModel<T> {
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
 
+    /**
+     * Applies animation state to the model for the current render frame.
+     *
+     * @param entity rendered gecko entity
+     * @param limbSwing limb swing phase
+     * @param limbSwingAmount limb swing intensity
+     * @param ageInTicks entity age in ticks including partials
+     * @param netHeadYaw horizontal head rotation
+     * @param headPitch vertical head rotation
+     */
     @Override
     public void setupAnim(GeckoEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
@@ -81,6 +110,12 @@ public class GeckoModel<T extends GeckoEntity> extends HierarchicalModel<T> {
 
     }
 
+    /**
+     * Applies clamped head rotation values to the head model part.
+     *
+     * @param headYaw requested head yaw in degrees
+     * @param headPitch requested head pitch in degrees
+     */
     private void applyHeadRotation(float headYaw, float headPitch) {
         headYaw = Mth.clamp(headYaw, -30f, 30f);
         headPitch = Mth.clamp(headPitch, -25f, 45);
@@ -89,6 +124,15 @@ public class GeckoModel<T extends GeckoEntity> extends HierarchicalModel<T> {
         this.head.xRot = headPitch * ((float) Math.PI / 180f);
     }
 
+    /**
+     * Renders the gecko model in a neutral pose for shoulder and head layers.
+     *
+     * @param poseStack pose stack used for transformations
+     * @param buffer destination vertex consumer
+     * @param light packed light value
+     * @param overlay packed overlay value
+     * @param color packed tint color
+     */
     public void renderOnShoulder(PoseStack poseStack,
                                  VertexConsumer buffer,
                                  int light,
@@ -99,11 +143,25 @@ public class GeckoModel<T extends GeckoEntity> extends HierarchicalModel<T> {
     }
 
 
+    /**
+     * Renders the visible root body part of the model.
+     *
+     * @param poseStack pose stack used for transformations
+     * @param vertexConsumer destination vertex consumer
+     * @param packedLight packed light value
+     * @param packedOverlay packed overlay value
+     * @param color packed tint color
+     */
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
         body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 
+    /**
+     * Returns the root model part used by the hierarchical model API.
+     *
+     * @return root body part of the model
+     */
     @Override
     public ModelPart root() {
         return body;

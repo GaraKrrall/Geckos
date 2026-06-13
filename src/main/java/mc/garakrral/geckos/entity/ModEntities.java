@@ -21,6 +21,12 @@ import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/**
+ * Central entity-type registry declarations for the mod.
+ *
+ * <p>Each deferred supplier here defines the runtime type information required for spawning,
+ * serialization, renderer binding, and attribute registration of the mod's custom mobs.
+ */
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Geckos.MODID);
@@ -32,5 +38,4 @@ public class ModEntities {
     public static final Supplier<EntityType<FlyEntity>> FLY =
             ENTITY_TYPES.register("fly", () -> EntityType.Builder.of(FlyEntity::new, MobCategory.AMBIENT)
                     .sized(0.30f, 0.30f).build("fly"));
-
 }

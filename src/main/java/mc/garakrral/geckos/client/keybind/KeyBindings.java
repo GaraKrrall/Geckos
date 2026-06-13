@@ -14,6 +14,12 @@ import net.minecraft.client.KeyMapping;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * Declares all keyboard bindings used by the mod.
+ *
+ * <p>The mappings are static so they can be referenced from both registration code and runtime
+ * input handling without additional setup objects.
+ */
 public class KeyBindings {
 
     public static final String CATEGORY = "key.category.geckos";

@@ -29,21 +29,55 @@ import net.neoforged.api.distmarker.OnlyIn;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+/**
+ * Custom player render layer that draws serialized shoulder geckos.
+ *
+ * @param <T> concrete player type rendered by the parent player renderer
+ */
 @OnlyIn(Dist.CLIENT)
 public class GeckoOnShoulderLayer<T extends Player> extends RenderLayer<T, PlayerModel<T>> {
     private final GeckoModel model;
 
+    /**
+     * Creates the shoulder layer using the baked gecko model layer.
+     *
+     * @param parent parent player renderer
+     * @param modelSet baked model set used to create the gecko model
+     */
     public GeckoOnShoulderLayer(RenderLayerParent<T, PlayerModel<T>> parent, EntityModelSet modelSet) {
         super(parent);
         this.model = new GeckoModel(modelSet.bakeLayer(GeckoModel.GECKO_LAYER_LOCATION));
     }
 
+    /**
+     * Renders the left and right shoulder geckos for the current player, if present.
+     *
+     * @param poseStack pose stack used for transformations
+     * @param buffer render buffer source
+     * @param light packed light value
+     * @param player player being rendered
+     * @param limbSwing limb swing phase
+     * @param limbSwingAmount limb swing intensity
+     * @param partialTick partial tick value
+     * @param ageInTicks render age
+     * @param netHeadYaw head yaw
+     * @param headPitch head pitch
+     */
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int light, T player, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
         renderGecko(poseStack, buffer, light, player, true);
         renderGecko(poseStack, buffer, light, player, false);
     }
 
+    /**
+     * Renders one shoulder gecko chosen by side.
+     *
+     * @param poseStack pose stack used for transformations
+     * @param buffer render buffer source
+     * @param light packed light value
+     * @param player player being rendered
+     * @param left whether the left shoulder should be rendered
+     */
     private void renderGecko(PoseStack poseStack, MultiBufferSource buffer, int light, T player, boolean left) {
         CompoundTag tag = left ? player.getShoulderEntityLeft() : player.getShoulderEntityRight();
         if (tag.isEmpty() || !tag.getString("id").equals("geckos:gecko")) return;
@@ -61,6 +95,12 @@ public class GeckoOnShoulderLayer<T extends Player> extends RenderLayer<T, Playe
         poseStack.popPose();
     }
 
+    /**
+     * Extracts the gecko variant from serialized shoulder NBT.
+     *
+     * @param tag serialized shoulder entity tag
+     * @return decoded variant, or {@link GeckoVariants#GREEN} if none was stored
+     */
     private GeckoVariants getVariantFromNBT(CompoundTag tag) {
         if (tag.contains("Variant", 3)) {
             return GeckoVariants.byId(tag.getInt("Variant"));

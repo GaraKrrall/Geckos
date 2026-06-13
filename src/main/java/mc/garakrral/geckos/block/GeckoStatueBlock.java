@@ -22,6 +22,13 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Decorative block representing a small gecko statue.
+ *
+ * <p>The block behaves as a horizontally oriented placed object with a custom collision and outline
+ * shape for each facing direction. Its state is intentionally simple: only the horizontal facing is
+ * persisted, and placement derives directly from the player's current look direction.
+ */
 public class GeckoStatueBlock extends Block {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
@@ -30,22 +37,47 @@ public class GeckoStatueBlock extends Block {
     private static final VoxelShape EAST_SHAPE  = Block.box(2, 0, 4, 12, 6, 12);
     private static final VoxelShape WEST_SHAPE  = Block.box(4, 0, 4, 14, 6, 12);
 
+    /**
+     * Creates a new statue block and initializes its default facing state.
+     *
+     * @param properties block property set used to configure hardness, sound, and related traits
+     */
     public GeckoStatueBlock(Properties properties) {
         super(properties);
 
         registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
+    /**
+     * Adds the block state properties used by this block.
+     *
+     * @param builder mutable state-definition builder supplied by the block bootstrap pipeline
+     */
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
+    /**
+     * Chooses the initial block state when the block is placed into the world.
+     *
+     * @param context placement context containing player direction and target position information
+     * @return block state whose facing is opposite the player's horizontal facing
+     */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
+    /**
+     * Returns the shape used for collision and selection based on the current facing.
+     *
+     * @param state current block state
+     * @param level level view requesting the shape
+     * @param pos block position
+     * @param context collision context describing the interacting entity, if any
+     * @return facing-specific voxel shape representing the statue footprint
+     */
     @Override
     protected @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return switch (state.getValue(FACING)) {

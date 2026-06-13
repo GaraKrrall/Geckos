@@ -30,7 +30,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Simple flying ambient mob representing a fly.
+ *
+ * <p>The entity uses airborne navigation, a looping wing animation state, and drops a dead fly item
+ * when killed.
+ */
 public class FlyEntity extends PathfinderMob implements FlyingAnimal {
+    /**
+     * Creates a fly entity and configures flying movement components.
+     *
+     * @param t entity type instance
+     * @param l current level
+     */
     public FlyEntity(EntityType<? extends FlyEntity> t, Level l) {
         super(t, l);
         this.moveControl = new FlyingMoveControl(this, 10, true);
@@ -40,6 +52,9 @@ public class FlyEntity extends PathfinderMob implements FlyingAnimal {
 
     public final AnimationState flyAnimationState = new AnimationState();
 
+    /**
+     * Registers the fly's AI goals.
+     */
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new RandomFlyGoal(this, 1.0D, 20));
@@ -47,6 +62,11 @@ public class FlyEntity extends PathfinderMob implements FlyingAnimal {
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 8.0F, 0.02F));
     }
 
+    /**
+     * Builds the attribute set used by fly entities.
+     *
+     * @return mutable attribute builder for the fly type
+     */
     public static AttributeSupplier.Builder createAttribute() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10.0)
@@ -56,11 +76,20 @@ public class FlyEntity extends PathfinderMob implements FlyingAnimal {
                 .add(Attributes.FOLLOW_RANGE, 48.0);
     }
 
+    /**
+     * Creates a flying navigation implementation for the entity.
+     *
+     * @param level current level
+     * @return flying path navigation instance
+     */
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
         return new FlyingPathNavigation(this, level);
     }
 
+    /**
+     * Updates base behavior and ensures the fly animation is started.
+     */
     @Override
     public void tick() {
         super.tick();
@@ -68,12 +97,24 @@ public class FlyEntity extends PathfinderMob implements FlyingAnimal {
         if (this.isFlying()) flyAnimationState.startIfStopped(this.tickCount);
     }
 
+    /**
+     * Drops the dead fly item in addition to the default loot behavior.
+     *
+     * @param level server level handling the death
+     * @param damageSource damage source that killed the entity
+     * @param recentlyHit whether the entity was recently hit by a player
+     */
     @Override
     public void dropCustomDeathLoot(@NotNull ServerLevel level, @NotNull DamageSource damageSource, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, damageSource, recentlyHit);
         this.spawnAtLocation(ModItems.DEAD_FLY);
     }
 
+    /**
+     * Reports that the mob should always be treated as flying.
+     *
+     * @return always {@code true}
+     */
     @Override
     public boolean isFlying() {
         return true;

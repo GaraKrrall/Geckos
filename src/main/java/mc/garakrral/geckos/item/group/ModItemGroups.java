@@ -22,6 +22,13 @@ import net.minecraft.world.item.ItemStack;
 
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/**
+ * Declares custom creative-mode tabs exposed by the mod.
+ *
+ * <p>The main tab provides a curated inventory view of the mod's currently obtainable items and
+ * blocks. This helps players and testers access content quickly without relying on recipe knowledge
+ * or command-based item spawning.
+ */
 public class ModItemGroups {
     public static final DeferredRegister<CreativeModeTab> TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Geckos.MODID);

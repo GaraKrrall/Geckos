@@ -7,6 +7,12 @@
  *
  */
 
+/**
+ * Placeholder source file for a future built-in datapack provider.
+ *
+ * <p>The previous implementation is currently commented out, but the file remains to preserve the
+ * intended integration point for worldgen or builtin-datapack generation when those systems return.
+ */
 package mc.garakrral.geckos.datagen;
 
 /*import java.util.Set;

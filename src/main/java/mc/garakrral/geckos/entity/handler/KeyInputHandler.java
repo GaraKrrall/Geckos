@@ -27,8 +27,20 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import static mc.garakrral.geckos.util.event.neoforge.GeckoCarryEvents.carriedGecko;
 
+/**
+ * Client tick listener that translates key presses into GUI actions and network packets.
+ *
+ * <p>This class is subscribed directly to the client-side event bus so it can poll key mappings at
+ * the end of each client tick. When a relevant key is consumed, it either opens a local screen or
+ * emits a packet to request a corresponding server-side gameplay action.
+ */
 @EventBusSubscriber(modid = Geckos.MODID, value = Dist.CLIENT)
 public class KeyInputHandler {
+    /**
+     * Processes one client tick worth of key input for gecko interactions.
+     *
+     * @param e post-tick client event used as the polling hook
+     */
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post e) {
         Minecraft mc = Minecraft.getInstance();

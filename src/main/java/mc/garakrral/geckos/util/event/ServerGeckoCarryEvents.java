@@ -18,8 +18,22 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * Authoritative carry-position logic for geckos manipulated by players.
+ *
+ * <p>This code runs on the logical server and computes the desired carried position from the owning
+ * player's eye position, look vector, configured carry distance, and world collisions. The result is
+ * the canonical position used by gameplay systems and synchronized back to clients through normal
+ * entity updates.
+ */
 public class ServerGeckoCarryEvents {
 
+    /**
+     * Recomputes and applies the world position of a carried gecko.
+     *
+     * @param gecko carried gecko whose owner, target distance, and collision constraints should be
+     *              evaluated
+     */
     public static void updateCarriedServerPosition(GeckoEntity gecko) {
         var geckoOwner = gecko.getOwner();
 

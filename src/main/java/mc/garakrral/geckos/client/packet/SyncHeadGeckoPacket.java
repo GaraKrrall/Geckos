@@ -25,6 +25,12 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+/**
+ * Server-to-client payload that synchronizes a player's head-mounted gecko attachment.
+ *
+ * @param playerId runtime id of the player whose attachment is being synchronized
+ * @param tag serialized head-gecko attachment data
+ */
 public record SyncHeadGeckoPacket(int playerId, CompoundTag tag) implements CustomPacketPayload {
 
     public static final Type<SyncHeadGeckoPacket> TYPE =
@@ -39,11 +45,22 @@ public record SyncHeadGeckoPacket(int playerId, CompoundTag tag) implements Cust
                     SyncHeadGeckoPacket::new
             );
 
+    /**
+     * Returns the payload type identifier used by NeoForge.
+     *
+     * @return packet type token
+     */
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
+    /**
+     * Applies the synchronized attachment data on the client.
+     *
+     * @param payload decoded packet payload
+     * @param ctx payload handling context
+     */
     public static void handle(SyncHeadGeckoPacket payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
@@ -56,6 +73,11 @@ public record SyncHeadGeckoPacket(int playerId, CompoundTag tag) implements Cust
         });
     }
 
+    /**
+     * Sends the current head-gecko state to the owner and all players tracking them.
+     *
+     * @param owner player whose head-gecko attachment should be synchronized
+     */
     public static void sendToTrackersAndSelf(ServerPlayer owner) {
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(
                 owner,
@@ -63,6 +85,12 @@ public record SyncHeadGeckoPacket(int playerId, CompoundTag tag) implements Cust
         );
     }
 
+    /**
+     * Sends the current head-gecko state of one player to another specific viewer.
+     *
+     * @param viewer client that should receive the attachment state
+     * @param owner player whose attachment data should be serialized into the packet
+     */
     public static void sendToViewer(ServerPlayer viewer, ServerPlayer owner) {
         PacketDistributor.sendToPlayer(
                 viewer,

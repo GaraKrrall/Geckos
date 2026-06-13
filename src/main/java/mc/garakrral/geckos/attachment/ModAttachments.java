@@ -19,6 +19,13 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.function.Supplier;
 
+/**
+ * Registers custom attachment types used by the mod.
+ *
+ * <p>Attachments provide a structured way to associate additional data with existing NeoForge game
+ * objects without creating custom subclasses. This mod uses an attachment to persist and synchronize
+ * the gecko currently mounted on a player's head.
+ */
 public class ModAttachments {
 
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
@@ -30,6 +37,11 @@ public class ModAttachments {
                             .serialize(CompoundTag.CODEC)
                             .build());
 
+    /**
+     * Registers the attachment deferred register on the supplied mod event bus.
+     *
+     * @param bus mod event bus responsible for processing deferred registration
+     */
     public static void register(IEventBus bus) {
         ATTACHMENT_TYPES.register(bus);
     }

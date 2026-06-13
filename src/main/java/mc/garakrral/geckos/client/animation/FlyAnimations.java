@@ -14,6 +14,12 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
+/**
+ * Static animation definitions used by the fly model.
+ *
+ * <p>The fly currently uses a single looping wing animation that is referenced directly by the fly
+ * model during per-frame animation setup.
+ */
 public class FlyAnimations {
     public static final AnimationDefinition fly = AnimationDefinition.Builder.withLength(0.125F).looping()
             .addAnimation("wing", new AnimationChannel(AnimationChannel.Targets.ROTATION,

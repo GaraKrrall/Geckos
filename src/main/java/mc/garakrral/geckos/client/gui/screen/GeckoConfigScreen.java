@@ -21,9 +21,21 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+/**
+ * Factory for the Cloth Config based mod configuration screen.
+ *
+ * <p>The returned screen exposes user-facing toggles for the gecko HUD and persists changes through
+ * the NeoForge config values declared in {@code GeckosConfig}.
+ */
 @OnlyIn(Dist.CLIENT)
 public class GeckoConfigScreen {
 
+    /**
+     * Builds the configuration screen shown from the mod list UI.
+     *
+     * @param parent parent screen that should be restored when the config UI closes
+     * @return fully built configuration screen
+     */
     public static Screen create(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)

@@ -24,8 +24,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+/**
+ * Client-to-server payload that requests mounting a tamed gecko onto the player's head or shoulder.
+ *
+ * @param entityId runtime entity id of the targeted gecko
+ * @param mountType selected mount destination
+ */
 public record GeckoMountPacket(int entityId, MountType mountType) implements CustomPacketPayload {
 
+    /**
+     * Enumerates the supported gecko mount destinations on the player model.
+     */
     public enum MountType {
         HEAD,
         LEFT,
@@ -46,11 +55,22 @@ public record GeckoMountPacket(int entityId, MountType mountType) implements Cus
                     (id, type) -> new GeckoMountPacket(id, MountType.valueOf(type))
             );
 
+    /**
+     * Returns the payload type identifier associated with this packet.
+     *
+     * @return packet type token
+     */
     @Override
     public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
+    /**
+     * Handles the mount request by serializing the gecko into the requested player storage slot.
+     *
+     * @param payload decoded packet payload
+     * @param context payload handling context
+     */
     public static void handle(GeckoMountPacket payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             ServerPlayer player = (ServerPlayer) context.player();
@@ -91,6 +111,13 @@ public record GeckoMountPacket(int entityId, MountType mountType) implements Cus
         });
     }
 
+    /**
+     * Writes serialized gecko data into one of the player's shoulder slots.
+     *
+     * @param player owning player
+     * @param tag serialized gecko NBT payload
+     * @param right {@code true} for right shoulder, {@code false} for left shoulder
+     */
     private static void setShoulder(ServerPlayer player, CompoundTag tag, boolean right) {
         try {
             var method = Player.class.getDeclaredMethod(

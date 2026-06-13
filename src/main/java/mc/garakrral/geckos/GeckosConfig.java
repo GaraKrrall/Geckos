@@ -14,6 +14,13 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
+/**
+ * Declares the mod configuration specification used by NeoForge's config system.
+ *
+ * <p>All values in this class are defined statically so they can be registered once and then read
+ * from anywhere in the codebase that needs HUD-related configuration. The options currently focus
+ * on whether the HUD is visible and where it is positioned on screen.
+ */
 @SuppressWarnings("removal")
 @EventBusSubscriber(modid = Geckos.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class GeckosConfig {
@@ -28,6 +35,14 @@ public class GeckosConfig {
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 
+    /**
+     * Receives config lifecycle notifications from NeoForge.
+     *
+     * <p>The method currently acts as a placeholder hook. Keeping it in place still documents the
+     * intended extension point for future config reloading, validation, or cache-refresh logic.
+     *
+     * @param event configuration event fired when the mod config is loaded or reloaded
+     */
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {}
 }

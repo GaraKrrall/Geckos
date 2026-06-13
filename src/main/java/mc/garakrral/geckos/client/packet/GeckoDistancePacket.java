@@ -22,6 +22,12 @@ import net.minecraft.world.entity.Entity;
 
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+/**
+ * Client-to-server payload that requests a new carry distance for a gecko.
+ *
+ * @param geckoId runtime entity id of the gecko being adjusted
+ * @param distance requested carry distance
+ */
 public record GeckoDistancePacket(int geckoId, float distance) implements CustomPacketPayload {
     public static final Type<GeckoDistancePacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Geckos.MODID, "gecko_distance"));
 
@@ -31,11 +37,22 @@ public record GeckoDistancePacket(int geckoId, float distance) implements Custom
                     ByteBufCodecs.FLOAT, GeckoDistancePacket::distance,
                     GeckoDistancePacket::new);
 
+    /**
+     * Returns the payload type identifier used by the networking system.
+     *
+     * @return packet type token for this payload
+     */
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
+    /**
+     * Applies the requested carry distance on the authoritative server entity.
+     *
+     * @param payload decoded packet payload
+     * @param ctx payload handling context
+     */
     public static void handle(GeckoDistancePacket payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer player)) return;

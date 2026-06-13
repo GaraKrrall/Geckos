@@ -15,8 +15,19 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
+/**
+ * Client-only helper responsible for keybinding registration.
+ *
+ * <p>The key mappings themselves are declared elsewhere, but this class provides the lifecycle hook
+ * that exposes them to Minecraft's input system during client initialization.
+ */
 @OnlyIn(Dist.CLIENT)
 public class ClientKeyRegisterEvents {
+    /**
+     * Registers every key mapping used by the mod.
+     *
+     * @param event key mapping registration event emitted on the client
+     */
     public static void registerKeys(RegisterKeyMappingsEvent event) {
         event.register(KeyBindings.DISMOUNT_KEY);
         event.register(KeyBindings.HEAD);

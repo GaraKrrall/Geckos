@@ -18,8 +18,20 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
+/**
+ * Client bootstrap helpers for entity renderer registration.
+ *
+ * <p>This class is invoked during client setup to bind the mod's custom entity types to their
+ * renderer implementations. The renderer binding must exist before any client world attempts to
+ * display those entities.
+ */
 @OnlyIn(Dist.CLIENT)
 public class ClientRendererEvents {
+    /**
+     * Registers client-side entity renderers for the mod's entities.
+     *
+     * @param event client setup event fired during mod initialization
+     */
     public static void registerEntityRenderers(FMLClientSetupEvent event) {
         EntityRenderers.register(ModEntities.GECKO.get(), GeckoRenderer::new);
         EntityRenderers.register(ModEntities.FLY.get(), FlyRenderer::new);

@@ -14,6 +14,13 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
+/**
+ * Static animation definitions used by the gecko model.
+ *
+ * <p>These definitions are generated-style data structures describing keyframe-based movement for
+ * the gecko's idle, walk, sleep, and swim states. They are intentionally exposed as constants so
+ * model code can reference them without rebuilding the animation graphs at runtime.
+ */
 public class GeckoAnimations {
     public static final AnimationDefinition ANIM_GECKO_IDLE = AnimationDefinition.Builder.withLength(4f).looping()
             .addAnimation("Head",

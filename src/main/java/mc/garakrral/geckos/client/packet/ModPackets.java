@@ -11,7 +11,19 @@ package mc.garakrral.geckos.client.packet;
 
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
+/**
+ * Registers every custom network payload used by the mod.
+ *
+ * <p>The payload registrar already encapsulates version negotiation and direction information. This
+ * helper simply groups the packet inventory so setup code remains concise and future additions stay
+ * in one place.
+ */
 public class ModPackets {
+    /**
+     * Registers packet codecs and handlers with the provided registrar.
+     *
+     * @param registrar versioned payload registrar for the current network channel
+     */
     public static void register(PayloadRegistrar registrar) {
         registrar.playToServer(
                 GeckoDismountPacket.TYPE,

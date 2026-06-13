@@ -23,6 +23,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+/**
+ * Client-to-server payload requesting that a mounted gecko be placed back into the world.
+ *
+ * <p>The packet first attempts to release the head-mounted gecko attachment and then falls back to
+ * right and left shoulder occupants if present.
+ */
 public record GeckoDismountPacket() implements CustomPacketPayload {
 
     public static final Type<GeckoDismountPacket> TYPE =
@@ -31,11 +37,22 @@ public record GeckoDismountPacket() implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, GeckoDismountPacket> CODEC =
             StreamCodec.unit(new GeckoDismountPacket());
 
+    /**
+     * Returns the payload type identifier for this packet.
+     *
+     * @return packet type token
+     */
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
+    /**
+     * Handles a dismount request from the client.
+     *
+     * @param payload decoded packet payload
+     * @param context payload handling context
+     */
     public static void handle(GeckoDismountPacket payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             ServerPlayer player = (ServerPlayer) context.player();
@@ -48,6 +65,13 @@ public record GeckoDismountPacket() implements CustomPacketPayload {
         });
     }
 
+    /**
+     * Attempts to restore a shoulder-stored gecko entity to the world.
+     *
+     * @param player owning player
+     * @param right {@code true} for right shoulder, {@code false} for left shoulder
+     * @return {@code true} if a gecko was found and processed
+     */
     private static boolean dropShoulder(ServerPlayer player, boolean right) {
         CompoundTag tag = right
                 ? player.getShoulderEntityRight()
@@ -93,6 +117,12 @@ public record GeckoDismountPacket() implements CustomPacketPayload {
         return true;
     }
 
+    /**
+     * Attempts to restore the head-mounted gecko attachment to a world entity.
+     *
+     * @param player owning player
+     * @return {@code true} if the player had a head gecko to drop
+     */
     private static boolean dropHead(ServerPlayer player) {
         CompoundTag tag = player.getData(ModAttachments.HEAD_GECKO.get());
 

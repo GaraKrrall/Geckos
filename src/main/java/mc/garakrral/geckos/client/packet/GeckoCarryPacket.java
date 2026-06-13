@@ -22,6 +22,12 @@ import net.minecraft.world.entity.Entity;
 
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+/**
+ * Client-to-server payload that toggles whether a gecko is being actively carried.
+ *
+ * @param geckoId runtime entity id of the targeted gecko
+ * @param carry desired carry state to apply on the server
+ */
 public record GeckoCarryPacket(int geckoId, boolean carry)
         implements CustomPacketPayload {
 
@@ -44,11 +50,22 @@ public record GeckoCarryPacket(int geckoId, boolean carry)
                     GeckoCarryPacket::new
             );
 
+    /**
+     * Returns the payload type identifier used by NeoForge networking.
+     *
+     * @return packet type token for this payload
+     */
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
+    /**
+     * Handles the packet on the server by updating the target gecko's carry flag.
+     *
+     * @param payload decoded packet payload
+     * @param ctx payload handling context supplied by NeoForge
+     */
     public static void handle(
             GeckoCarryPacket payload,
             IPayloadContext ctx

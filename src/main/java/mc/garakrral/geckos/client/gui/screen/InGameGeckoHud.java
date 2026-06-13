@@ -33,11 +33,22 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * In-game HUD overlay that shows available gecko interaction hints for the looked-at tamed gecko.
+ *
+ * <p>The overlay is rendered only when the local player is targeting their own tamed gecko and the
+ * corresponding config options permit the HUD to be displayed.
+ */
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = Geckos.MODID, value = Dist.CLIENT)
 public class InGameGeckoHud {
 
     private static final ResourceLocation BOOK_TEXTURE = GeckoResourceLocation.getFromResources(Resources.GECKO_PAPER);
+    /**
+     * Renders the gecko HUD after the normal GUI has been drawn.
+     *
+     * @param e post-GUI render event providing the current {@link GuiGraphics} instance
+     */
     @SubscribeEvent
     public static void render(RenderGuiEvent.Post e) {
         Minecraft mc = Minecraft.getInstance();
@@ -133,6 +144,15 @@ public class InGameGeckoHud {
         }
     }
 
+    /**
+     * Builds one HUD line showing an action label, its key binding, and whether it is currently
+     * available.
+     *
+     * @param text human-readable action label
+     * @param key translated key name
+     * @param enabled whether the action can currently be used
+     * @return styled component representing the HUD line
+     */
     private static Component line(String text, String key, boolean enabled) {
         Component c = Component.literal(text + " [" + key + "]");
         if (enabled) return c;

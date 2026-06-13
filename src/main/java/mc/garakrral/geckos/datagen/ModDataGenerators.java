@@ -25,10 +25,21 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
+/**
+ * Entry point for data generation provider registration.
+ *
+ * <p>This subscriber wires the project's recipe, loot, model, and tag generators into NeoForge's
+ * gather-data lifecycle.
+ */
 @SuppressWarnings("removal")
 @EventBusSubscriber(modid = Geckos.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModDataGenerators {
 
+    /**
+     * Registers all active data providers based on the include-client/include-server flags.
+     *
+     * @param dataEvent gather-data event carrying output paths and registry lookups
+     */
     @SubscribeEvent
     public static void gatherData(GatherDataEvent dataEvent) {
         DataGenerator gen = dataEvent.getGenerator();

@@ -31,15 +31,40 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+/**
+ * Custom player render layer that draws a gecko on the player's head when the attachment is set.
+ *
+ * @param <T> concrete player type rendered by the parent player renderer
+ */
 @OnlyIn(Dist.CLIENT)
 public class GeckoOnHeadLayer<T extends Player> extends RenderLayer<T, PlayerModel<T>> {
     private final GeckoModel model;
 
+    /**
+     * Creates the head layer using the baked gecko model layer.
+     *
+     * @param parent parent player renderer
+     * @param models baked model set used to create the gecko model
+     */
     public GeckoOnHeadLayer(RenderLayerParent<T, PlayerModel<T>> parent, EntityModelSet models) {
         super(parent);
         this.model = new GeckoModel(models.bakeLayer(GeckoModel.GECKO_LAYER_LOCATION));
     }
 
+    /**
+     * Renders a head-mounted gecko if the player currently has serialized head-gecko data.
+     *
+     * @param pose pose stack used for layer transformations
+     * @param buffer render buffer source
+     * @param light packed light value
+     * @param player player being rendered
+     * @param limbSwing limb swing phase
+     * @param limbSwingAmount limb swing intensity
+     * @param partialTick frame partial tick
+     * @param age age in ticks
+     * @param yaw head yaw
+     * @param pitch head pitch
+     */
     @Override
     public void render(PoseStack pose, MultiBufferSource buffer, int light, T player, float limbSwing, float limbSwingAmount, float partialTick, float age, float yaw, float pitch) {
         CompoundTag tag = player.getData(ModAttachments.HEAD_GECKO.get());

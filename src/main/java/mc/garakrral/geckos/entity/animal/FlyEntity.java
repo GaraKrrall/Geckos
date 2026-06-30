@@ -9,7 +9,7 @@
 
 package mc.garakrral.geckos.entity.animal;
 
-import mc.garakrral.geckos.entity.goal.RandomFlyGoal;
+import mc.garakrral.geckos.entity.goal.FlyWanderGoal;
 import mc.garakrral.geckos.item.ModItems;
 
 import net.minecraft.server.level.ServerLevel;
@@ -57,7 +57,7 @@ public class FlyEntity extends PathfinderMob implements FlyingAnimal {
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new RandomFlyGoal(this, 1.0D, 20));
+        this.goalSelector.addGoal(1, new FlyWanderGoal(this));
         this.goalSelector.addGoal(2, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 8.0F, 0.02F));
     }
@@ -118,5 +118,11 @@ public class FlyEntity extends PathfinderMob implements FlyingAnimal {
     @Override
     public boolean isFlying() {
         return true;
+    }
+
+
+    @Override
+    public boolean causeFallDamage(float fallDistance, float damageMultiplier, @NotNull DamageSource damageSource) {
+        return false;
     }
 }

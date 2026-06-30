@@ -13,9 +13,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 
+
 /**
  * Simple AI goal that occasionally sends a flying mob toward a random nearby position.
  */
+@Deprecated(forRemoval = true)
 public class RandomFlyGoal extends Goal {
     private final PathfinderMob entity;
     private final double speed;

@@ -12,7 +12,7 @@
   ],
   "spawners": {
     "type": "geckos:fly",
-    "weight": 50,
+    "weight": 31,
     "minCount": 3,
     "maxCount": 10
   }

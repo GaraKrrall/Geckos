@@ -1,0 +1,19 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:forest",
+    "minecraft:plains",
+    "minecraft:swamp",
+    "minecraft:dark_forest",
+    "minecraft:savanna",
+    "minecraft:birch_forest",
+    "minecraft:jungle",
+    "minecraft:desert"
+  ],
+  "spawners": {
+    "type": "geckos:fly",
+    "weight": 31,
+    "minCount": 3,
+    "maxCount": 10
+  }
+}

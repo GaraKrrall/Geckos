@@ -72,17 +72,7 @@ public record GeckoMountPacket(int entityId, MountType mountType) {
         });
         ctx.get().setPacketHandled(true);
     }
-
     private static void setShoulder(ServerPlayer player, CompoundTag tag, boolean right) {
-        try {
-            var method = Player.class.getDeclaredMethod(
-                    right ? "setShoulderEntityRight" : "setShoulderEntityLeft",
-                    CompoundTag.class
-            );
-            method.setAccessible(true);
-            method.invoke(player, tag);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        boolean success = player.setEntityOnShoulder(tag);
     }
 }

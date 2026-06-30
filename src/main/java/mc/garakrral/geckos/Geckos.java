@@ -19,6 +19,8 @@ import mc.garakrral.geckos.util.function.ClientStartFunctions;
 import mc.garakrral.geckos.util.function.ServerStartFunctions;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -32,6 +34,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.slf4j.Logger;
+
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 /**
 

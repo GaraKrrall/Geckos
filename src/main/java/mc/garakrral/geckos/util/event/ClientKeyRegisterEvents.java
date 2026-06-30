@@ -29,8 +29,8 @@ public class ClientKeyRegisterEvents {
      * @param event key mapping registration event emitted on the client
      */
     public static void registerKeys(RegisterKeyMappingsEvent event) {
-        event.register(KeyBindings.DISMOUNT_KEY);
-        event.register(KeyBindings.HEAD);
+      //  event.register(KeyBindings.DISMOUNT_KEY);
+        //event.register(KeyBindings.HEAD);
         event.register(KeyBindings.LEFT);
         event.register(KeyBindings.RIGHT);
         event.register(KeyBindings.HUD_EDITOR);

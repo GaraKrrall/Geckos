@@ -46,7 +46,7 @@ public final class ForgeEventBusEvents {
      *
      * @param event post-tick event for a player; fired once per player per server tick
      */
-    @SubscribeEvent
+   /* @SubscribeEvent
     public static void onPlayerTick(final TickEvent.PlayerTickEvent event) {
         final Player player = event.player;
 
@@ -64,7 +64,7 @@ public final class ForgeEventBusEvents {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     /**
      * Checks whether a shoulder entity tag belongs to this mod's gecko entity.

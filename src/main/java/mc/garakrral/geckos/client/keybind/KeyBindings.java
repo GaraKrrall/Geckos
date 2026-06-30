@@ -13,7 +13,7 @@ public class KeyBindings {
             "key.geckos.dismount",
             KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_LEFT_SHIFT,
+            InputConstants.UNKNOWN.getValue(),
             CATEGORY
     );
     public static final KeyMapping HEAD =
@@ -21,7 +21,7 @@ public class KeyBindings {
                     "key.geckos.head",
                     KeyConflictContext.IN_GAME,
                     InputConstants.Type.KEYSYM,
-                    GLFW.GLFW_KEY_R,
+                    InputConstants.UNKNOWN.getValue(),
                     CATEGORY
             );
 

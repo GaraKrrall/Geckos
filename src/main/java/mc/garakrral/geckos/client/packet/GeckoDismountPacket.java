@@ -3,6 +3,7 @@ package mc.garakrral.geckos.client.packet;
 import mc.garakrral.geckos.Geckos;
 import mc.garakrral.geckos.entity.animal.GeckoEntity;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,11 +11,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
 public record GeckoDismountPacket() {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     public static void encode(GeckoDismountPacket msg, FriendlyByteBuf buf) {
     }
 
@@ -35,7 +40,7 @@ public record GeckoDismountPacket() {
     }
 
     private static boolean dropShoulder(ServerPlayer player, boolean right) {
-        CompoundTag tag = right ? player.getShoulderEntityRight() : player.getShoulderEntityLeft();
+        /*CompoundTag tag = right ? player.getShoulderEntityRight() : player.getShoulderEntityLeft();
 
         if (tag.isEmpty() || !tag.getString("id").equals("geckos:gecko")) {
             return false;
@@ -61,17 +66,12 @@ public record GeckoDismountPacket() {
             gecko.setShoulderCooldown(100);
         }
 
-        try {
-            var method = Player.class.getDeclaredMethod(
-                    right ? "setShoulderEntityRight" : "setShoulderEntityLeft",
-                    CompoundTag.class
-            );
-            method.setAccessible(true);
-            method.invoke(player, new CompoundTag());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        LOGGER.info("before R={}", player.getShoulderEntityRight());
 
+        boolean ok = player.setEntityOnShoulder(new CompoundTag());
+
+        LOGGER.info("result={}", ok);
+        LOGGER.info("after R={}", player.getShoulderEntityRight());*/
         return true;
     }
 }
